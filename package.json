@@ -9,13 +9,11 @@
   "repository": "https://github.com/cc-alexcollins/gs-log-viewer",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
     "GameSparks",
     "log"
   ],
   "author": "GitHub",
-  "license": "MIT License",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^4.0.1",
     "react": "^15.6.2",
