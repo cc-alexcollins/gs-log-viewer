@@ -1,0 +1,24 @@
+{
+  "name": "gs-log-viewer",
+  "version": "1.0.0",
+  "description": "Log viewer for GameSparks",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/cc-alexcollins/gs-log-viewer",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "GameSparks",
+    "log"
+  ],
+  "author": "GitHub",
+  "license": "MIT License",
+  "devDependencies": {
+    "electron": "^4.0.1",
+    "react": "^15.6.2",
+    "adminlte-reactjs": "^1.0.6"
+  }
+}
