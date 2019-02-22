@@ -36,10 +36,14 @@
     />
   </head>
 
-  <body class="skin-blue sidebar-mini ">
+  <body class="skin-blue sidebar-mini">
     <div id="widgets-container"></div>
 
-    <script src="src/logViewer.js" type="text/babel"></script>
+    <script>
+      console.log("pre-render");
+    </script>
+    <script src="src/logViewer.js"></script>
+    <script src="renderer.js"></script>
   </body>
 
   <!--

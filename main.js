@@ -8,7 +8,7 @@ let devTools = true;
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: devTools ? 1355 : 800, height: 600 });
+  mainWindow = new BrowserWindow({ width: devTools ? 1355 : 800, height: 800 });
 
   // and load the index.html of the app.
   mainWindow.loadFile("index.html");
