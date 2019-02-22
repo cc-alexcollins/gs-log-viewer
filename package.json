@@ -22,5 +22,6 @@
     "eslint": "^5.9.0",
     "prettier": "^1.15.2",
     "minimatch": "^3.0.2"
-  }
+  },
+  "dependencies": {}
 }
