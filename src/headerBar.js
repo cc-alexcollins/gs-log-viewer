@@ -26,18 +26,28 @@ exports.HeaderBar = React.createClass({
       // Logo
       React.createElement(
         "a",
-        { href: "index2.html", className: "logo" },
+        { href: "index.html", className: "logo" },
         // Mini logo for sidebar mini 50x50 pixels
         React.createElement(
           "span",
           { className: "logo-mini" },
-          React.createElement("b", null, "GSLV")
+          React.createElement(
+            "p",
+            null,
+            React.createElement("b", null, "GS"),
+            "LV"
+          )
         ),
         // Logo for regular state and mobile devices
         React.createElement(
           "span",
           { className: "logo-lg" },
-          React.createElement("b", null, "GS Log Viewer")
+          React.createElement(
+            "p",
+            null,
+            React.createElement("b", null, "GameSparks"),
+            " Log Viewer"
+          )
         )
       ),
       // Header Navbar: style can be found in header.less
