@@ -1,11 +1,14 @@
 const React = require("react");
+const HeaderBar = require("./headerBar").HeaderBar;
 
-exports.App = React.createClass({
+class App extends React.Component {
   render() {
     return React.createElement(
       "div",
       { className: "wrapper" },
-      React.createElement("p", null, "testtesttest")
+      React.createElement(HeaderBar, null, null)
     );
   }
-});
+}
+
+exports.App = App;
