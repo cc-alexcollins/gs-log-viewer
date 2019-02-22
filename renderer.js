@@ -7,9 +7,7 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-var LogViewer = require("./src/logViewer").LogViewer;
+var App = require("./src/app").App;
+const MOUNT_NODE = document.getElementById("root");
 
-ReactDOM.render(
-  React.createElement(LogViewer, null, null),
-  document.getElementById("widgets-container")
-);
+ReactDOM.render(React.createElement(App, null, null), MOUNT_NODE);
