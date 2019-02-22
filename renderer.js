@@ -1,29 +1,13 @@
-const adminlte = require("adminlte-reactjs");
+/**
+ * @module Renderer
+ *
+ * @description Renderer entrypoint that displays the log viewer in the window
+ */
+
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-var HeaderBar = require("./src/headerBar").HeaderBar;
-var NavigationMenu = adminlte.NavigationMenu;
-
-class LogViewer extends React.Component {
-  render() {
-    return React.createElement(
-      "div",
-      { className: "wrapper" },
-      React.createElement(HeaderBar, null, null)
-    );
-    /*
-    return (
-      <div className="wrapper">
-        <div className="test">"test1"</div>
-        <div className="content-wrapper">
-          <NavigationMenu />
-        </div>
-      </div>
-    );
-     */
-  }
-}
+var LogViewer = require("./src/logViewer").LogViewer;
 
 ReactDOM.render(
   React.createElement(LogViewer, null, null),
