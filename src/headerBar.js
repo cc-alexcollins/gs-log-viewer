@@ -2,8 +2,7 @@ const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
 const Log = require("./log");
 
-const CredentialsDropdown = require("./credentialsDropdown")
-  .CredentialsDropdown;
+const CredentialsButton = require("./credentialsButton").CredentialsButton;
 
 const Menu = SemanticUIReact.Menu;
 
@@ -31,11 +30,7 @@ exports.HeaderBar = class HeaderBar extends React.Component {
         },
         "Game Data"
       ),
-      React.createElement(
-        Menu,
-        { className: "secondary right" },
-        React.createElement(CredentialsDropdown, null)
-      )
+      React.createElement(CredentialsButton, this.props.credentialsButtonProps)
     );
   }
 };
