@@ -1,22 +1,18 @@
 const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
+const Log = require("./log");
+
+const CredentialsDropdown = require("./credentialsDropdown")
+  .CredentialsDropdown;
 
 const Menu = SemanticUIReact.Menu;
 
 exports.HeaderBar = class HeaderBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: props.menuIndex,
-      activeIndexSetter: props.onClick
-    };
-  }
-
   render() {
-    console.log("header bar:", this.props);
+    Log.renderLog("Header Bar", this);
     return React.createElement(
       Menu,
-      {},
+      null,
       React.createElement(Menu.Item, { header: true }, "Gamesparks Log Viewer"),
       React.createElement(
         Menu.Item,
@@ -34,6 +30,11 @@ exports.HeaderBar = class HeaderBar extends React.Component {
           onClick: () => this.props.onClick(2)
         },
         "Game Data"
+      ),
+      React.createElement(
+        Menu,
+        { className: "secondary right" },
+        React.createElement(CredentialsDropdown, null)
       )
     );
   }
