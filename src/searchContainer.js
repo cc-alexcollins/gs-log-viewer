@@ -18,7 +18,11 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  handleAccordionClick() {
+    this.setState({
+      active: !this.state.active
+    });
+  }
 
   render() {
     Log.renderLog("Search Container", this);
@@ -27,13 +31,16 @@ exports.SearchContainer = class SearchContainer extends React.Component {
       { styled: true, fluid: true },
       React.createElement(
         Accordion.Title,
-        null,
+        {
+          active: this.state.active,
+          onClick: () => this.handleAccordionClick()
+        },
         React.createElement("i", { className: "dropdown icon" }),
         "Search"
       ),
       React.createElement(
         Accordion.Content,
-        null,
+        { active: this.state.active },
         React.createElement(
           Form,
           null,
