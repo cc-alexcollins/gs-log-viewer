@@ -4,6 +4,7 @@ const Log = require("./log");
 
 const Button = SemanticUIReact.Button;
 const Icon = SemanticUIReact.Icon;
+const Input = SemanticUIReact.Input;
 const Menu = SemanticUIReact.Menu;
 
 exports.CredentialsButton = class CredentialsButton extends React.Component {
