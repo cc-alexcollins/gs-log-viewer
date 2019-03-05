@@ -10,7 +10,7 @@ const SortDefaults = {
 
 const FieldsDefaults = {
   None: null,
-  LogMessage: { _id: -1, script: -1 }
+  LogMessage: { _id: 0, script: 0 }
 };
 
 const Category = [
@@ -49,4 +49,5 @@ const Category = [
 
 exports.LogLevels = LogLevels;
 exports.SortDefaults = SortDefaults;
+exports.FieldsDefaults = FieldsDefaults;
 exports.Category = Category;

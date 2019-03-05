@@ -79,7 +79,7 @@ class App extends React.Component {
             index === 1
               ? Constants.SortDefaults.TimestampLatest
               : Constants.SortDefaults.None,
-          fields: null
+          fields: Constants.FieldsDefaults.LogMessage
         }
       });
     }
@@ -127,20 +127,46 @@ class App extends React.Component {
       return query;
     }, {});
 
+    if (search.levels && search.levels.length > 0) {
+      query.level = {
+        $in: search.levels.slice(0) // Shallow copy for the payload
+      };
+    }
+
+    if (search.categories && search.categories.length > 0) {
+      query["log.category"] = {
+        $in: search.categories.slice(0) // Shallow copy for the payload
+      };
+    }
+
     if (search.playerId && search.playerId.length > 0) {
       query.playerId = search.playerId;
     }
 
+    if (search.messageQuery && search.messageQuery.length > 0) {
+      query["log.message"] = { $regex: search.messageQuery };
+    }
+
     // Build the payload
-    const payload = {
-      fields: search.fields,
-      limit: 100,
-      query: query,
-      skip: 0,
-      sort: search.sort
-    };
+    const payload = this.buildPayload(
+      search.fields,
+      100,
+      query,
+      0,
+      search.sort
+    );
 
     console.log("search for:", JSON.stringify(payload));
+  }
+
+  buildPayload(fields, limit, query, skip, sort) {
+    return {
+      fields: fields || {},
+      limit: limit || 100,
+      query: query || {},
+      skip: skip || 0,
+      sort: sort || {}
+    };
   }
 }
 
