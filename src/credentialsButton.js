@@ -25,7 +25,7 @@ exports.CredentialsButton = class CredentialsButton extends React.Component {
           onClick: this.props.showCredentials
         },
         React.createElement(Icon, {
-          name: loggedIn ? "check" : "close icon"
+          name: loggedIn ? "check" : "close"
         }),
         loggedIn ? "Logged In!" : "Invalid Credentials"
       )

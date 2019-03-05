@@ -205,12 +205,12 @@ exports.SearchContainer = class SearchContainer extends React.Component {
               Form.Button,
               {
                 onClick: () => {
-                  if (!this.props.search.autoRefresh) {
+                  if (!this.props.search.active) {
                     this.props.onSearchClicked();
                   }
                 },
                 positive: true,
-                loading: this.props.search.autoRefresh
+                loading: this.props.search.active
               },
               "Search Now"
             )

@@ -1,6 +1,10 @@
 const React = require("react");
+
 const HeaderBar = require("./headerBar").HeaderBar;
 const SearchContainer = require("./searchContainer").SearchContainer;
+
+const ApiWrapper = require("./api/apiWrapper");
+
 const Constants = require("./constants");
 const Log = require("./log");
 
@@ -10,11 +14,14 @@ class App extends React.Component {
     this.state = {
       menuIndex: 0,
       credentials: {
-        show: false,
-        token: "token",
-        loading: false
+        username: "jeff@cloudcade.com",
+        password: ".9L8kwHb",
+        apiKey: "V369801KkvYT",
+        stage: "preview",
+        token: null
       },
       search: {
+        collection: null,
         levels: [],
         categories: [],
         playerId: "",
@@ -22,13 +29,19 @@ class App extends React.Component {
         dataQuery: [],
         sort: null,
         fields: null,
-        autoRefresh: false
+        autoRefresh: false,
+        active: false
       }
     };
   }
 
   componentDidMount() {
     this.setIndex(1);
+    ApiWrapper.login(this.state.credentials).then(() => {
+      this.setState({
+        credentials: this.state.credentials
+      });
+    });
   }
 
   render() {
@@ -70,6 +83,7 @@ class App extends React.Component {
       this.setState({
         menuIndex: index,
         search: {
+          collection: "script.log",
           levels: [Constants.LogLevels.Debug, Constants.LogLevels.Error],
           categories: [],
           playerId: "",
@@ -79,7 +93,9 @@ class App extends React.Component {
             index === 1
               ? Constants.SortDefaults.TimestampLatest
               : Constants.SortDefaults.None,
-          fields: Constants.FieldsDefaults.LogMessage
+          fields: Constants.FieldsDefaults.LogMessage,
+          autoRefresh: true,
+          active: false
         }
       });
     }
@@ -157,6 +173,32 @@ class App extends React.Component {
     );
 
     console.log("search for:", JSON.stringify(payload));
+
+    Promise.resolve()
+      .then(() => {
+        this.state.search.active = true;
+        this.setState({
+          search: this.state.search
+        });
+      })
+      .then(() => {
+        return ApiWrapper.find(
+          this.state.credentials,
+          this.state.search.collection,
+          payload
+        );
+      })
+      .then(searchResultsArray => {
+        console.log(
+          "search complete! got " + searchResultsArray.length + " elements!"
+        );
+
+        this.state.search.active = false;
+        this.setState({
+          credentials: this.state.credentials,
+          search: this.state.search
+        });
+      });
   }
 
   buildPayload(fields, limit, query, skip, sort) {
