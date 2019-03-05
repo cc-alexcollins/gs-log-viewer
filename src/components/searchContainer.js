@@ -11,12 +11,14 @@ const Header = SemanticUIReact.Header;
 const Form = SemanticUIReact.Form;
 const Input = SemanticUIReact.Input;
 const Item = SemanticUIReact.Item;
-const Transition = SemanticUIReact.Transition;
+const Menu = SemanticUIReact.Menu;
+const Visibility = SemanticUIReact.Visibility;
 
 exports.SearchContainer = class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      stuck: false,
       active: false,
       lastDataFailed: false
     };
@@ -93,131 +95,145 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     }
 
     return React.createElement(
-      Accordion,
-      { styled: true, fluid: true },
+      Visibility,
+      {
+        onBottomPassed: () => this.setState({ stuck: true }),
+        onBottomVisible: () => this.setState({ stuck: false })
+      },
       React.createElement(
-        Accordion.Title,
-        {
-          active: this.state.active,
-          onClick: () => this.handleAccordionClick()
-        },
-        React.createElement("i", { className: "dropdown icon" }),
-        "Search"
-      ),
-      React.createElement(
-        Accordion.Content,
-        { active: this.state.active },
+        Menu,
+        { borderless: true, fixed: this.state.stuck ? "top" : undefined },
         React.createElement(
-          Form,
-          null,
+          Accordion,
+          { styled: true, fluid: true },
           React.createElement(
-            Form.Group,
-            { widths: "equal" },
-            React.createElement(Form.Dropdown, {
-              onChange: (e, p) => this.handleLogLevelChange(p.value),
-              label: "Log Level",
-              placeholder: "All",
-              fluid: true,
-              multiple: true,
-              selection: true,
-              value: this.props.search.levels,
-              options: Object.keys(Constants.LogLevels).map(key => {
-                return {
-                  key: key,
-                  text: key,
-                  value: Constants.LogLevels[key]
-                };
-              })
-            }),
-            React.createElement(Form.Dropdown, {
-              onChange: (e, p) => this.handleCategoryChange(p.value),
-              label: "Category",
-              placeholder: "All",
-              fluid: true,
-              multiple: true,
-              selection: true,
-              value: this.props.search.categories,
-              options: Object.keys(Constants.Category).map(key => {
-                return {
-                  key: key,
-                  text: key,
-                  value: Constants.Category[key]
-                };
-              })
-            }),
-            React.createElement(Form.Input, {
-              onChange: (e, p) => this.handlePlayerIdChange(p.value),
-              label: "Player Id",
-              placeholder: "Any",
-              fluid: true,
-              value: this.props.search.playerId
-            })
+            Accordion.Title,
+            {
+              active: this.state.active,
+              onClick: () => this.handleAccordionClick()
+            },
+            React.createElement("i", { className: "dropdown icon" }),
+            "Search"
           ),
           React.createElement(
-            Form.Group,
-            { widths: "equal" },
-            React.createElement(Form.Input, {
-              onChange: (e, p) => this.handleMessageQueryChange(p.value),
-              label: "Message Query",
-              value: this.props.search.messageQuery,
-              fluid: true,
-              width: 6
-            }),
-            React.createElement(Form.Dropdown, {
-              onChange: (e, p) => this.handleDataQueryChange(p.value),
-              label: this.state.lastDataFailed
-                ? "Data Query -- Invalid JSON Entered"
-                : "Data Query",
-              placeholder: "None",
-              error: this.state.lastDataFailed,
-              fluid: true,
-              multiple: true,
-              selection: true,
-              allowAdditions: true,
-              search: true,
-              value: this.props.search.dataQuery,
-              options: this.props.search.dataQuery.map(key => {
-                return {
-                  key: key,
-                  text: key,
-                  value: key
-                };
-              })
-            })
-          ),
-          React.createElement(
-            Header,
-            { className: "dividing", as: "h4" },
-            "Refresh"
-          ),
-          React.createElement(
-            Form.Group,
-            { inline: true },
+            Accordion.Content,
+            { active: this.state.active },
             React.createElement(
-              Form.Button,
-              {
-                onClick: () =>
-                  this.props.onSearchAutoClicked(
-                    !this.props.search.autoRefresh
-                  ),
-                label: "Auto-Refresh",
-                toggle: true,
-                active: this.props.search.autoRefresh
-              },
-              this.props.search.autoRefresh ? "On" : "Off"
-            ),
-            React.createElement(
-              Form.Button,
-              {
-                onClick: () => {
-                  if (!this.props.search.active) {
-                    this.props.onSearchClicked();
-                  }
-                },
-                positive: true,
-                loading: this.props.search.active
-              },
-              "Search Now"
+              Form,
+              null,
+              React.createElement(
+                Form.Group,
+                { widths: "equal" },
+                React.createElement(Form.Dropdown, {
+                  onChange: (e, p) => this.handleLogLevelChange(p.value),
+                  label: "Log Level",
+                  placeholder: "All",
+                  fluid: true,
+                  multiple: true,
+                  selection: true,
+                  value: this.props.search.levels,
+                  options: Object.keys(Constants.LogLevels).map(key => {
+                    return {
+                      key: key,
+                      text: key,
+                      value: Constants.LogLevels[key]
+                    };
+                  })
+                }),
+                React.createElement(Form.Dropdown, {
+                  onChange: (e, p) => this.handleCategoryChange(p.value),
+                  label: "Category",
+                  placeholder: "All",
+                  fluid: true,
+                  multiple: true,
+                  selection: true,
+                  value: this.props.search.categories,
+                  options: Object.keys(Constants.Category).map(key => {
+                    return {
+                      key: key,
+                      text: key,
+                      value: Constants.Category[key]
+                    };
+                  })
+                }),
+                React.createElement(Form.Input, {
+                  onChange: (e, p) => this.handlePlayerIdChange(p.value),
+                  label: "Player Id",
+                  placeholder: "Any",
+                  fluid: true,
+                  value: this.props.search.playerId
+                })
+              ),
+              React.createElement(
+                Form.Group,
+                { widths: "equal" },
+                React.createElement(Form.Input, {
+                  onChange: (e, p) => this.handleMessageQueryChange(p.value),
+                  label: "Message Query",
+                  value: this.props.search.messageQuery,
+                  fluid: true,
+                  width: 6
+                }),
+                React.createElement(Form.Dropdown, {
+                  onChange: (e, p) => this.handleDataQueryChange(p.value),
+                  label: this.state.lastDataFailed
+                    ? "Data Query -- Invalid JSON Entered"
+                    : "Data Query",
+                  placeholder: "None",
+                  error: this.state.lastDataFailed,
+                  fluid: true,
+                  multiple: true,
+                  selection: true,
+                  allowAdditions: true,
+                  search: true,
+                  value: this.props.search.dataQuery,
+                  options: this.props.search.dataQuery.map(key => {
+                    return {
+                      key: key,
+                      text: key,
+                      value: key
+                    };
+                  })
+                })
+              ),
+              React.createElement(
+                Header,
+                { className: "dividing", as: "h4" },
+                "Refresh"
+              ),
+              React.createElement(
+                Form.Group,
+                { inline: true },
+                React.createElement(
+                  Form.Button,
+                  {
+                    onClick: () =>
+                      this.props.onSearchAutoClicked(
+                        !this.props.search.autoRefresh
+                      ),
+                    label: "Auto-Refresh",
+                    toggle: true,
+                    active: this.props.search.autoRefresh
+                  },
+                  this.props.search.autoRefresh ? "On" : "Off"
+                ),
+                React.createElement(
+                  Form.Button,
+                  {
+                    onClick: () => {
+                      if (!this.props.search.active) {
+                        this.props.onSearchClicked();
+                        this.setState({
+                          stuck: false
+                        });
+                      }
+                    },
+                    positive: true,
+                    loading: this.props.search.active
+                  },
+                  "Search Now"
+                )
+              )
             )
           )
         )
