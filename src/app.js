@@ -18,8 +18,10 @@ class App extends React.Component {
         levels: [],
         categories: [],
         playerId: "",
-        dataQuery: "",
-        sort: ""
+        messageQuery: "",
+        dataQuery: [],
+        sort: null,
+        fields: null
       }
     };
   }
@@ -34,6 +36,8 @@ class App extends React.Component {
     var menuComponents = null;
     if (this.state.menuIndex === 1) {
       menuComponents = React.createElement(SearchContainer, {
+        search: this.state.search,
+        onSearchUpdated: search => this.updateSearch(search),
         onSearchClicked: () => this.search()
       });
     }
@@ -64,11 +68,13 @@ class App extends React.Component {
           levels: [Constants.LogLevels.Debug, Constants.LogLevels.Error],
           categories: [],
           playerId: "",
-          dataQuery: "",
+          messageQuery: "",
+          dataQuery: [],
           sort:
             index === 1
               ? Constants.SortDefaults.TimestampLatest
-              : Constants.SortDefaults.None
+              : Constants.SortDefaults.None,
+          fields: null
         }
       });
     }
@@ -81,7 +87,56 @@ class App extends React.Component {
     });
   }
 
-  search() {}
+  updateSearch(search) {
+    this.cleanupSearch(search);
+    this.setState({
+      search: search
+    });
+  }
+
+  cleanupSearch(search) {
+    const ll = Object.values(Constants.LogLevels);
+    search.levels.sort((x, y) => {
+      return ll.indexOf(x) - ll.indexOf(y);
+    });
+
+    // Use alphanumeric sorting
+    search.categories.sort();
+  }
+
+  search() {
+    const search = this.state.search;
+
+    // Build the query
+    const query = search.dataQuery.reduce((query, element) => {
+      const split = element.split(":", 2);
+      const key = split[0];
+      const value = JSON.parse(split[1]);
+      const entry = {};
+      entry[key] = value;
+      const json = JSON.stringify(entry);
+
+      const parsed = JSON.parse(json);
+      const logKey = "log." + Object.keys(parsed)[0];
+      query[logKey] = Object.values(parsed)[0];
+      return query;
+    }, {});
+
+    if (search.playerId && search.playerId.length > 0) {
+      query.playerId = search.playerId;
+    }
+
+    // Build the payload
+    const payload = {
+      fields: search.fields,
+      limit: 100,
+      query: query,
+      skip: 0,
+      sort: search.sort
+    };
+
+    console.log("search for:", JSON.stringify(payload));
+  }
 }
 
 exports.App = App;

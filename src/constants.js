@@ -4,8 +4,13 @@ const LogLevels = {
 };
 
 const SortDefaults = {
-  None: "",
-  TimestampLatest: "{ ts: -1 }"
+  None: null,
+  TimestampLatest: { ts: -1 }
+};
+
+const FieldsDefaults = {
+  None: null,
+  LogMessage: { _id: -1, script: -1 }
 };
 
 const Category = [
@@ -37,7 +42,10 @@ const Category = [
   "Shop",
   "Tutorial",
   "Util"
-].reduce((all, c) => (all[c] = c), {});
+].reduce((all, c) => {
+  all[c] = c;
+  return all;
+}, {});
 
 exports.LogLevels = LogLevels;
 exports.SortDefaults = SortDefaults;
