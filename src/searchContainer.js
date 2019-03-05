@@ -7,6 +7,7 @@ const Log = require("./log");
 const Accordion = SemanticUIReact.Accordion;
 const Button = SemanticUIReact.Button;
 const Dropdown = SemanticUIReact.Dropdown;
+const Header = SemanticUIReact.Header;
 const Form = SemanticUIReact.Form;
 const Input = SemanticUIReact.Input;
 const Item = SemanticUIReact.Item;
@@ -16,7 +17,8 @@ exports.SearchContainer = class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false
+      active: false,
+      lastDataFailed: false
     };
   }
 
@@ -178,9 +180,41 @@ exports.SearchContainer = class SearchContainer extends React.Component {
               })
             })
           ),
-          React.createElement(Button, {
-            onClick: () => this.props.onSearchClicked()
-          })
+          React.createElement(
+            Header,
+            { className: "dividing", as: "h4" },
+            "Refresh"
+          ),
+          React.createElement(
+            Form.Group,
+            { inline: true },
+            React.createElement(
+              Form.Button,
+              {
+                onClick: () =>
+                  this.props.onSearchAutoClicked(
+                    !this.props.search.autoRefresh
+                  ),
+                label: "Auto-Refresh",
+                toggle: true,
+                active: this.props.search.autoRefresh
+              },
+              this.props.search.autoRefresh ? "On" : "Off"
+            ),
+            React.createElement(
+              Form.Button,
+              {
+                onClick: () => {
+                  if (!this.props.search.autoRefresh) {
+                    this.props.onSearchClicked();
+                  }
+                },
+                positive: true,
+                loading: this.props.search.autoRefresh
+              },
+              "Search Now"
+            )
+          )
         )
       )
     );

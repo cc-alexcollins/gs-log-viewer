@@ -21,7 +21,8 @@ class App extends React.Component {
         messageQuery: "",
         dataQuery: [],
         sort: null,
-        fields: null
+        fields: null,
+        autoRefresh: false
       }
     };
   }
@@ -38,6 +39,10 @@ class App extends React.Component {
       menuComponents = React.createElement(SearchContainer, {
         search: this.state.search,
         onSearchUpdated: search => this.updateSearch(search),
+        onSearchAutoClicked: auto => {
+          this.state.search.autoRefresh = auto;
+          this.setState({ search: this.state.search });
+        },
         onSearchClicked: () => this.search()
       });
     }
