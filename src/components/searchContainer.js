@@ -1,8 +1,8 @@
 const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
 
-const Constants = require("./constants");
-const Log = require("./log");
+const Constants = require("../constants");
+const Log = require("../log");
 
 const Accordion = SemanticUIReact.Accordion;
 const Button = SemanticUIReact.Button;

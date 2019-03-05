@@ -1,6 +1,6 @@
 const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
-const Log = require("./log");
+const Log = require("../log");
 
 const Button = SemanticUIReact.Button;
 const Icon = SemanticUIReact.Icon;

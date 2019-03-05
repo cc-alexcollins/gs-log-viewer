@@ -10,7 +10,7 @@ const SortDefaults = {
 
 const FieldsDefaults = {
   None: null,
-  LogMessage: { _id: 0, script: 0 }
+  LogMessage: { script: 0 }
 };
 
 const Category = [

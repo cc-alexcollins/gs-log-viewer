@@ -1,9 +1,10 @@
 const React = require("react");
 
-const HeaderBar = require("./headerBar").HeaderBar;
-const SearchContainer = require("./searchContainer").SearchContainer;
-
 const ApiWrapper = require("./api/apiWrapper");
+
+const HeaderBar = require("./components/headerBar").HeaderBar;
+const SearchContainer = require("./components/searchContainer").SearchContainer;
+const LogsDisplay = require("./components/logsDisplay").LogsDisplay;
 
 const Constants = require("./constants");
 const Log = require("./log");
@@ -31,6 +32,9 @@ class App extends React.Component {
         fields: null,
         autoRefresh: false,
         active: false
+      },
+      display: {
+        elements: null
       }
     };
   }
@@ -49,15 +53,22 @@ class App extends React.Component {
 
     var menuComponents = null;
     if (this.state.menuIndex === 1) {
-      menuComponents = React.createElement(SearchContainer, {
-        search: this.state.search,
-        onSearchUpdated: search => this.updateSearch(search),
-        onSearchAutoClicked: auto => {
-          this.state.search.autoRefresh = auto;
-          this.setState({ search: this.state.search });
-        },
-        onSearchClicked: () => this.search()
-      });
+      menuComponents = React.createElement(
+        "div",
+        null,
+        React.createElement(SearchContainer, {
+          search: this.state.search,
+          onSearchUpdated: search => this.updateSearch(search),
+          onSearchAutoClicked: auto => {
+            this.state.search.autoRefresh = auto;
+            this.setState({ search: this.state.search });
+          },
+          onSearchClicked: () => this.search()
+        }),
+        React.createElement(LogsDisplay, {
+          elements: this.state.display.elements
+        })
+      );
     }
 
     return React.createElement(
@@ -193,10 +204,19 @@ class App extends React.Component {
           "search complete! got " + searchResultsArray.length + " elements!"
         );
 
+        this.state.display.elements = searchResultsArray.map(res => {
+          return {
+            key: res._id.$oid,
+            contents: res,
+            expanded: false
+          };
+        });
+
         this.state.search.active = false;
         this.setState({
           credentials: this.state.credentials,
-          search: this.state.search
+          search: this.state.search,
+          display: this.state.display
         });
       });
   }
