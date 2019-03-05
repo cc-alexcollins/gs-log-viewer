@@ -14,6 +14,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       menuIndex: 0,
+      reopenSearch: false,
       credentials: {
         username: "jeff@cloudcade.com",
         password: ".9L8kwHb",
@@ -31,7 +32,8 @@ class App extends React.Component {
         sort: null,
         fields: null,
         autoRefresh: false,
-        active: false
+        active: false,
+        forceDisplayActive: undefined
       },
       display: {
         elements: null
@@ -66,6 +68,7 @@ class App extends React.Component {
           onSearchClicked: () => this.search()
         }),
         React.createElement(LogsDisplay, {
+          search: this.state.search,
           elements: this.state.display.elements
         })
       );
@@ -213,6 +216,9 @@ class App extends React.Component {
         });
 
         this.state.search.active = false;
+        this.state.search.forceDisplayActive =
+          this.state.display.elements.length === 0;
+
         this.setState({
           credentials: this.state.credentials,
           search: this.state.search,

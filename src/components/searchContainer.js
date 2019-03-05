@@ -87,6 +87,11 @@ exports.SearchContainer = class SearchContainer extends React.Component {
 
   render() {
     Log.renderLog("Search Container", this);
+
+    if (this.props.search.reOpen) {
+      this.state.active = true; // temp state update
+    }
+
     return React.createElement(
       Accordion,
       { styled: true, fluid: true },
@@ -218,6 +223,18 @@ exports.SearchContainer = class SearchContainer extends React.Component {
         )
       )
     );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search.forceDisplayActive !== undefined) {
+      this.setState({
+        active: this.props.search.forceDisplayActive
+      });
+
+      const searchState = this.props.search;
+      searchState.forceDisplayActive = undefined;
+      this.props.onSearchUpdated(searchState);
+    }
   }
 };
 
