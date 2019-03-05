@@ -16,7 +16,7 @@ function login(credentials) {
     return Auth.getAccessToken(credentials);
   }
 
-  return Promise.resolve();
+  return Promise.resolve().then(() => credentials);
 }
 
 async function find(credentials, collection, payload) {

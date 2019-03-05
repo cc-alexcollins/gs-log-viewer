@@ -12,5 +12,5 @@ function renderLog(name, component) {
   }
 }
 
-exports.filters = [Filter.Render];
+exports.filters = [];
 exports.renderLog = renderLog;

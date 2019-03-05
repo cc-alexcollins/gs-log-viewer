@@ -98,7 +98,8 @@ exports.SearchContainer = class SearchContainer extends React.Component {
       Visibility,
       {
         onBottomPassed: () => this.setState({ stuck: true }),
-        onBottomVisible: () => this.setState({ stuck: false })
+        onBottomVisible: () => this.setState({ stuck: false }),
+        once: false
       },
       React.createElement(
         Menu,
@@ -223,9 +224,6 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                     onClick: () => {
                       if (!this.props.search.active) {
                         this.props.onSearchClicked();
-                        this.setState({
-                          stuck: false
-                        });
                       }
                     },
                     positive: true,

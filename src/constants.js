@@ -47,7 +47,10 @@ const Category = [
   return all;
 }, {});
 
+const Containers = { "ch-backend": "h348516i1zcM", "ch-alex": "V369801KkvYT" };
+
 exports.LogLevels = LogLevels;
 exports.SortDefaults = SortDefaults;
 exports.FieldsDefaults = FieldsDefaults;
 exports.Category = Category;
+exports.Containers = Containers;

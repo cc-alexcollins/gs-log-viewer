@@ -18,9 +18,10 @@ class App extends React.Component {
       credentials: {
         username: "jeff@cloudcade.com",
         password: ".9L8kwHb",
-        apiKey: "V369801KkvYT",
+        apiKey: "h348516i1zcM",
         stage: "preview",
-        token: null
+        token: null,
+        loading: false
       },
       search: {
         collection: null,
@@ -43,11 +44,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.setIndex(1);
-    ApiWrapper.login(this.state.credentials).then(() => {
-      this.setState({
-        credentials: this.state.credentials
-      });
-    });
+    this.updateCredentials(this.state.credentials);
   }
 
   render() {
@@ -83,7 +80,9 @@ class App extends React.Component {
           menuIndex: this.state.menuIndex,
           onClick: index => this.setIndex(index),
           credentialsButtonProps: {
-            credentials: this.state.credentials
+            credentials: this.state.credentials,
+            onCredentialsUpdated: credentials =>
+              this.updateCredentials(credentials)
           }
         },
         null
@@ -116,10 +115,23 @@ class App extends React.Component {
   }
 
   updateCredentials(credentials) {
-    credentials.show = false;
-    this.setState({
-      credentials: credentials
-    });
+    Promise.resolve()
+      .then(() => {
+        // Get a new token
+        credentials.token = null;
+        credentials.loading = true;
+        this.setState({
+          credentials: credentials
+        });
+      })
+      .then(() => {
+        return ApiWrapper.login(this.state.credentials).then(credentials => {
+          credentials.loading = false;
+          this.setState({
+            credentials: credentials
+          });
+        });
+      });
   }
 
   updateSearch(search) {
@@ -203,15 +215,13 @@ class App extends React.Component {
         );
       })
       .then(searchResultsArray => {
-        console.log(
-          "search complete! got " + searchResultsArray.length + " elements!"
-        );
-
+        const prev = this.state.display.elements;
         this.state.display.elements = searchResultsArray.map(res => {
           return {
             key: res._id.$oid,
             contents: res,
-            expanded: false
+            expanded: false,
+            isNew: prev && !prev.find(e => e.key === res._id.$oid)
           };
         });
 

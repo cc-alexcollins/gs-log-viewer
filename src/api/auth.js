@@ -18,6 +18,7 @@ function getAccessToken(credentials) {
         "|",
         credentials.token
       );
+      return credentials;
     });
 }
 
