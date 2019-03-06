@@ -62,7 +62,8 @@ class App extends React.Component {
             this.state.search.autoRefresh = auto;
             this.setState({ search: this.state.search });
           },
-          onSearchClicked: () => this.search()
+          onSearchClicked: () => this.search(),
+          canSearch: this.state.credentials.token !== null
         }),
         React.createElement(LogsDisplay, {
           search: this.state.search,
@@ -217,8 +218,10 @@ class App extends React.Component {
       .then(searchResultsArray => {
         const prev = this.state.display.elements;
         this.state.display.elements = searchResultsArray.map(res => {
+          const id = res._id.$oid;
+          delete res._id;
           return {
-            key: res._id.$oid,
+            key: id,
             contents: res,
             expanded: false,
             isNew: prev && !prev.find(e => e.key === res._id.$oid)

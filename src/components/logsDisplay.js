@@ -1,13 +1,19 @@
 const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
+const util = require("util");
 
+const CCUtils = require("../ccUtils");
 const Constants = require("../constants");
+const JsonAccordion = require("./jsonAccordion").JsonAccordion;
 const Log = require("../log");
 
 const Accordion = SemanticUIReact.Accordion;
+const Card = SemanticUIReact.Card;
 const Divider = SemanticUIReact.Divider;
 const Grid = SemanticUIReact.Grid;
 const Header = SemanticUIReact.Header;
+const Icon = SemanticUIReact.Icon;
+const List = SemanticUIReact.List;
 
 exports.LogsDisplay = class LogsDisplay extends React.Component {
   constructor(props) {
@@ -29,37 +35,56 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       );
     }
 
-    const gridElements = this.props.elements
+    const cards = this.props.elements
       ? this.props.elements.map((element, index) => {
+          const error = element.contents.level === "ERROR";
+
           return React.createElement(
-            Grid.Row,
-            { key: index },
+            Card,
+            {
+              key: index,
+              fluid: true,
+              color: error ? "red" : undefined
+            },
             React.createElement(
-              Grid.Column,
+              Card.Content,
               null,
-              React.createElement(Accordion, {
-                fluid: true,
-                panels: [
-                  {
-                    key: element.key,
-                    title:
-                      element.contents.log.message + " -- " + element.isNew,
-                    content: React.createElement(
-                      Accordion.Content,
-                      null,
-                      React.createElement(
-                        "p",
-                        null,
-                        element.contents.log.category
-                      )
-                    )
-                  }
-                ]
+              React.createElement(
+                Card.Header,
+                null,
+                React.createElement(Icon, {
+                  name: error ? "exclamation" : "info",
+                  color: error ? "red" : undefined,
+                  circular: true
+                }),
+                "  ",
+                element.contents.log.message
+              )
+            ),
+            React.createElement(
+              Card.Content,
+              null,
+              React.createElement(
+                Card.Meta,
+                null,
+                util.format(
+                  "%s | %s",
+                  element.contents.log.category,
+                  new Date(element.contents.ts.$numberLong).toString()
+                )
+              ),
+              React.createElement(JsonAccordion, {
+                key: "Contents",
+                json: {
+                  key: "Contents",
+                  data: element.contents,
+                  path: "obj",
+                  depth: 0
+                },
+                blackList: ["obj.ts", "obj.log.category"]
               })
             )
           );
-
-          const x = {};
         })
       : [];
 
@@ -70,12 +95,10 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       React.createElement(
         Header,
         { as: "h3", block: true },
-        "Displaying " + gridElements.length + " Elements"
+        "Displaying " + cards.length + " Elements"
       ),
-      React.createElement(Grid, {
-        divided: "vertically",
-        overflow: "scroll",
-        children: gridElements
+      React.createElement(Card.Group, {
+        children: cards
       })
     );
   }

@@ -19,7 +19,7 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     super(props);
     this.state = {
       stuck: false,
-      active: false,
+      active: true,
       lastDataFailed: false
     };
   }
@@ -227,7 +227,8 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                       }
                     },
                     positive: true,
-                    loading: this.props.search.active
+                    loading: this.props.search.active,
+                    disabled: !this.props.canSearch
                   },
                   "Search Now"
                 )
