@@ -49,7 +49,13 @@ exports.LogsEntry = class LogsEntry extends React.Component {
       Card,
       {
         fluid: true,
-        color: error ? "red" : undefined
+        color: error ? "red" : undefined,
+        style: {
+          marginTop: "0.5em",
+          marginBottom: "0.5em",
+          marginRight: "1em",
+          marginLeft: "1em"
+        }
       },
       React.createElement(
         Card.Content,
