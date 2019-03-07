@@ -1,11 +1,14 @@
 const React = require("react");
-const SemanticUIReact = require("semantic-ui-react");
-
-const Accordion = SemanticUIReact.Accordion;
-const Icon = SemanticUIReact.Icon;
-const Item = SemanticUIReact.Item;
-const Label = SemanticUIReact.Label;
-const List = SemanticUIReact.List;
+const { clipboard } = require("electron");
+const {
+  Accordion,
+  Button,
+  Icon,
+  Item,
+  Label,
+  List,
+  Popup
+} = require("semantic-ui-react");
 
 const KEY_COLOR = "black";
 const TYPE_COLORS = {
@@ -34,27 +37,14 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
     let dataType = typeof data;
     if (dataType === "object") {
       let arrow = this.state.active ? "triangle down" : "triangle right";
-      let nameText = "object { " + Object.keys(data).length + " }";
-      if (this.props.displayOverride) {
-        nameText = this.props.displayOverride(data);
-      } else if (Array.isArray(data)) {
-        nameText = "array [ " + data.length + " ]";
-        data = data.reduce((obj, element, index) => {
-          obj[index] = element;
-          return obj;
-        }, {});
-      }
 
-      let name = React.createElement(
-        Label,
-        { basic: true, horizontal: true, color: TYPE_COLORS[dataType] }, // "object"
-        nameText
-      );
-
+      let childCount = 0;
       const children = Object.keys(data).reduce((children, key) => {
         const element = data[key];
         const path = this.props.json.path + "." + key;
         if (this.props.blackList.includes(path)) return children;
+        childCount++;
+        if (!this.state.active) return children;
 
         children.push(
           React.createElement(exports.JsonAccordion, {
@@ -70,6 +60,33 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
         );
         return children;
       }, []);
+
+      let nameText = "object { " + childCount + " }";
+      if (this.props.displayOverride) {
+        nameText = this.props.displayOverride(data);
+      } else if (Array.isArray(data)) {
+        nameText = "array [ " + childCount + " ]";
+      }
+
+      let name = React.createElement(
+        Label,
+        { basic: true, horizontal: true, color: TYPE_COLORS[dataType] }, // "object"
+        nameText
+      );
+
+      let accordionContentNode = null;
+
+      if (childCount > 0) {
+        accordionContentNode = React.createElement(Accordion.Content, {
+          active: this.state.active,
+          style: {
+            paddingTop: 0
+          },
+          children: children
+        });
+      } else {
+        accordionContentNode = React.createElement("div", null);
+      }
 
       return React.createElement(
         Accordion,
@@ -104,13 +121,7 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
             this.state.active ? "" : name
           )
         ),
-        React.createElement(Accordion.Content, {
-          active: this.state.active,
-          style: {
-            paddingTop: 0
-          },
-          children: children
-        })
+        accordionContentNode
       );
     }
 
@@ -131,13 +142,29 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
       ),
       COLON,
       React.createElement(
-        Label,
+        Popup,
         {
-          color: TYPE_COLORS[dataType] || "black",
-          horizontal: true,
-          basic: true
+          position: "right center",
+          hideOnScroll: true,
+          on: "hover",
+          trigger: React.createElement(
+            Label,
+            {
+              as: "a",
+              color: TYPE_COLORS[dataType] || "black",
+              horizontal: true,
+              basic: true,
+              onClick: () => clipboard.writeText(data.toString())
+            },
+            data
+          )
         },
-        data
+        React.createElement(
+          Popup.Content,
+          null,
+          React.createElement(Icon, { name: "copy" }),
+          "Copy"
+        )
       )
     );
   }
