@@ -224,7 +224,7 @@ class App extends React.Component {
             key: id,
             contents: res,
             expanded: false,
-            isNew: prev && !prev.find(e => e.key === res._id.$oid)
+            isNew: prev && !prev.find(e => e.key === id)
           };
         });
 
