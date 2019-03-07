@@ -20,6 +20,8 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
   }
 
   render() {
+    Log.renderLog("Logs Display", this);
+
     if (!this.props.elements) {
       return React.createElement(Header, null, "Ready to search");
     } else if (this.props.elements.length === 0) {
@@ -50,7 +52,10 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       React.createElement(
         Header,
         { as: "h3", block: true },
-        "Displaying " + cards.length + " Elements"
+        "Displaying Elements " +
+          (this.props.search.skip + 1) +
+          " - " +
+          cards.length
       ),
       React.createElement(Card.Group, {
         children: cards

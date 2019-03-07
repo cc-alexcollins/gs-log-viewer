@@ -9,6 +9,23 @@ const LogsDisplay = require("./components/logsDisplay").LogsDisplay;
 const Constants = require("./constants");
 const Log = require("./log");
 
+const PAGE_SIZE = 50;
+
+const DEFAULT_SEARCH = {
+  collection: null,
+  levels: [],
+  categories: [],
+  playerId: "",
+  messageQuery: "",
+  dataQuery: [],
+  sort: null,
+  fields: null,
+  skip: 0,
+  autoRefresh: false,
+  active: false,
+  forceDisplayActive: true
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -23,19 +40,7 @@ class App extends React.Component {
         token: null,
         loading: false
       },
-      search: {
-        collection: null,
-        levels: [],
-        categories: [],
-        playerId: "",
-        messageQuery: "",
-        dataQuery: [],
-        sort: null,
-        fields: null,
-        autoRefresh: false,
-        active: false,
-        forceDisplayActive: undefined
-      },
+      search: DEFAULT_SEARCH,
       display: {
         elements: null
       }
@@ -43,7 +48,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setIndex(1);
+    this.setIndex(1, true);
     this.updateCredentials(this.state.credentials);
   }
 
@@ -79,7 +84,7 @@ class App extends React.Component {
         HeaderBar,
         {
           menuIndex: this.state.menuIndex,
-          onClick: index => this.setIndex(index),
+          onClick: index => this.setIndex(index, false),
           credentialsButtonProps: {
             credentials: this.state.credentials,
             onCredentialsUpdated: credentials =>
@@ -92,24 +97,19 @@ class App extends React.Component {
     );
   }
 
-  setIndex(index) {
-    if (this.state.menuIndex !== index) {
+  setIndex(index, force) {
+    if (this.state.menuIndex !== index || force) {
+      const search = DEFAULT_SEARCH;
+      search.collection = "script.log";
+      search.levels = [Constants.LogLevels.Debug, Constants.LogLevels.Error];
+      search.sort = Constants.SortDefaults.TimestampLatest;
+      search.fields = Constants.FieldsDefaults.LogMessage;
+
       this.setState({
         menuIndex: index,
-        search: {
-          collection: "script.log",
-          levels: [Constants.LogLevels.Debug, Constants.LogLevels.Error],
-          categories: [],
-          playerId: "",
-          messageQuery: "",
-          dataQuery: [],
-          sort:
-            index === 1
-              ? Constants.SortDefaults.TimestampLatest
-              : Constants.SortDefaults.None,
-          fields: Constants.FieldsDefaults.LogMessage,
-          autoRefresh: true,
-          active: false
+        search: search,
+        display: {
+          elements: null
         }
       });
     }
@@ -131,6 +131,7 @@ class App extends React.Component {
           this.setState({
             credentials: credentials
           });
+          this.setIndex(this.state.menuIndex, true);
         });
       });
   }
@@ -193,9 +194,9 @@ class App extends React.Component {
     // Build the payload
     const payload = this.buildPayload(
       search.fields,
-      100,
+      PAGE_SIZE,
       query,
-      0,
+      search.skip,
       search.sort
     );
 

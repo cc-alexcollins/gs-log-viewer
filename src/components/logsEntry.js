@@ -15,6 +15,8 @@ exports.LogsEntry = class LogsEntry extends React.Component {
   }
 
   render() {
+    Log.renderLog("Logs Entry", this);
+
     const element = this.props.element;
     const error = element.contents.level === "ERROR";
 
@@ -73,7 +75,7 @@ exports.LogsEntry = class LogsEntry extends React.Component {
             path: "log.data",
             depth: 0
           },
-          blackList: []
+          blackList: ["log.data.combatInstance._id"]
         }),
         React.createElement(JsonAccordion, {
           json: {
