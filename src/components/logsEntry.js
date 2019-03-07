@@ -1,13 +1,11 @@
 const React = require("react");
-const SemanticUIReact = require("semantic-ui-react");
 const util = require("util");
 
 const Constants = require("../constants");
-const JsonAccordion = require("./jsonAccordion").JsonAccordion;
 const Log = require("../log");
 
-const Card = SemanticUIReact.Card;
-const Icon = SemanticUIReact.Icon;
+const { Card, Icon } = require("semantic-ui-react");
+const { JsonAccordion } = require("./jsonAccordion");
 
 exports.LogsEntry = class LogsEntry extends React.Component {
   constructor(props) {

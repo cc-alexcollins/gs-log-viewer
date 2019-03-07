@@ -1,18 +1,19 @@
 const React = require("react");
-const SemanticUIReact = require("semantic-ui-react");
 const util = require("util");
 
 const Constants = require("../constants");
 const Log = require("../log");
-const LogsEntry = require("./logsEntry").LogsEntry;
 
-const Accordion = SemanticUIReact.Accordion;
-const Card = SemanticUIReact.Card;
-const Divider = SemanticUIReact.Divider;
-const Grid = SemanticUIReact.Grid;
-const Header = SemanticUIReact.Header;
-const Icon = SemanticUIReact.Icon;
-const List = SemanticUIReact.List;
+const {
+  Accordion,
+  Button,
+  Card,
+  Divider,
+  Grid,
+  Header,
+  Icon
+} = require("semantic-ui-react");
+const { LogsEntry } = require("./logsEntry");
 
 exports.LogsDisplay = class LogsDisplay extends React.Component {
   constructor(props) {
@@ -45,6 +46,12 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
         })
       : [];
 
+    const headerText =
+      "Displaying Elements " +
+      (this.props.search.skip + 1) +
+      " - " +
+      cards.length;
+
     return React.createElement(
       "div",
       null,
@@ -52,10 +59,8 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       React.createElement(
         Header,
         { as: "h3", block: true },
-        "Displaying Elements " +
-          (this.props.search.skip + 1) +
-          " - " +
-          cards.length
+        headerText,
+        React.createElement(Button)
       ),
       React.createElement(Card.Group, {
         children: cards

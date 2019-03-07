@@ -9,22 +9,7 @@ const LogsDisplay = require("./components/logsDisplay").LogsDisplay;
 const Constants = require("./constants");
 const Log = require("./log");
 
-const PAGE_SIZE = 50;
-
-const DEFAULT_SEARCH = {
-  collection: null,
-  levels: [],
-  categories: [],
-  playerId: "",
-  messageQuery: "",
-  dataQuery: [],
-  sort: null,
-  fields: null,
-  skip: 0,
-  autoRefresh: false,
-  active: false,
-  forceDisplayActive: false
-};
+const PAGE_SIZE = 20;
 
 class App extends React.Component {
   constructor(props) {
@@ -40,7 +25,7 @@ class App extends React.Component {
         token: null,
         loading: false
       },
-      search: DEFAULT_SEARCH,
+      search: this.getDefaultSearch(),
       display: {
         elements: null
       }
@@ -62,12 +47,10 @@ class App extends React.Component {
         null,
         React.createElement(SearchContainer, {
           search: this.state.search,
-          onSearchUpdated: search => this.updateSearch(search),
           onSearchAutoClicked: auto => {
             this.state.search.autoRefresh = auto;
             this.setState({ search: this.state.search });
           },
-          onSearchClicked: () => this.search(),
           canSearch: this.state.credentials.token !== null
         }),
         React.createElement(LogsDisplay, {
@@ -99,7 +82,7 @@ class App extends React.Component {
 
   setIndex(index, force) {
     if (this.state.menuIndex !== index || force) {
-      const search = DEFAULT_SEARCH;
+      const search = this.getDefaultSearch();
       search.collection = "script.log";
       search.levels = [Constants.LogLevels.Debug, Constants.LogLevels.Error];
       search.sort = Constants.SortDefaults.TimestampLatest;
@@ -135,6 +118,30 @@ class App extends React.Component {
           this.setIndex(this.state.menuIndex, true);
         });
       });
+  }
+
+  getDefaultSearch() {
+    return {
+      // Parameters
+      collection: null,
+      levels: [],
+      categories: [],
+      playerId: "",
+      messageQuery: "",
+      dataQuery: [],
+      sort: null,
+      fields: null,
+      skip: 0,
+
+      // State
+      autoRefresh: false,
+      active: false,
+      forceDisplayActive: false,
+
+      // Methods
+      onSearchUpdated: search => this.updateSearch(search),
+      onSearchClicked: () => this.search()
+    };
   }
 
   updateSearch(search) {

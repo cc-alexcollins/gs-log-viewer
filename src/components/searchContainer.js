@@ -1,18 +1,19 @@
 const React = require("react");
-const SemanticUIReact = require("semantic-ui-react");
 
 const Constants = require("../constants");
 const Log = require("../log");
 
-const Accordion = SemanticUIReact.Accordion;
-const Button = SemanticUIReact.Button;
-const Dropdown = SemanticUIReact.Dropdown;
-const Header = SemanticUIReact.Header;
-const Form = SemanticUIReact.Form;
-const Input = SemanticUIReact.Input;
-const Item = SemanticUIReact.Item;
-const Menu = SemanticUIReact.Menu;
-const Visibility = SemanticUIReact.Visibility;
+const {
+  Accordion,
+  Button,
+  Dropdown,
+  Header,
+  Form,
+  Input,
+  Item,
+  Menu,
+  Visibility
+} = require("semantic-ui-react");
 
 exports.SearchContainer = class SearchContainer extends React.Component {
   constructor(props) {
@@ -34,25 +35,25 @@ exports.SearchContainer = class SearchContainer extends React.Component {
   handleLogLevelChange(newValue) {
     const searchState = this.props.search;
     searchState.levels = newValue;
-    this.props.onSearchUpdated(searchState);
+    this.props.search.onSearchUpdated(searchState);
   }
 
   handleCategoryChange(newValue) {
     const searchState = this.props.search;
     searchState.categories = newValue;
-    this.props.onSearchUpdated(searchState);
+    this.props.search.onSearchUpdated(searchState);
   }
 
   handlePlayerIdChange(newValue) {
     const searchState = this.props.search;
     searchState.playerId = newValue;
-    this.props.onSearchUpdated(searchState);
+    this.props.search.onSearchUpdated(searchState);
   }
 
   handleMessageQueryChange(newValue) {
     const searchState = this.props.search;
     searchState.messageQuery = newValue;
-    this.props.onSearchUpdated(searchState);
+    this.props.search.onSearchUpdated(searchState);
   }
 
   handleDataQueryChange(newValue) {
@@ -84,14 +85,15 @@ exports.SearchContainer = class SearchContainer extends React.Component {
 
     const searchState = this.props.search;
     searchState.dataQuery = newValue;
-    this.props.onSearchUpdated(searchState);
+    this.props.search.onSearchUpdated(searchState);
   }
 
   render() {
     Log.renderLog("Search Container", this);
 
-    if (this.props.search.reOpen) {
-      this.state.active = true; // temp state update
+    if (this.props.search.forceDisplayActive !== undefined) {
+      // temp state update -- update happens in component did update
+      this.state.active = this.props.search.forceDisplayActive;
     }
 
     return React.createElement(
@@ -122,6 +124,11 @@ exports.SearchContainer = class SearchContainer extends React.Component {
             React.createElement(
               Form,
               null,
+              React.createElement(
+                Header,
+                { className: "dividing", as: "h4" },
+                "Parameters"
+              ),
               React.createElement(
                 Form.Group,
                 { widths: "equal" },
@@ -223,7 +230,7 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                   {
                     onClick: () => {
                       if (!this.props.search.active) {
-                        this.props.onSearchClicked();
+                        this.props.search.onSearchClicked();
                       }
                     },
                     positive: true,
@@ -248,7 +255,7 @@ exports.SearchContainer = class SearchContainer extends React.Component {
 
       const searchState = this.props.search;
       searchState.forceDisplayActive = undefined;
-      this.props.onSearchUpdated(searchState);
+      this.props.search.onSearchUpdated(searchState);
     }
   }
 };
