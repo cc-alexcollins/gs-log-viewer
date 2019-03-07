@@ -48,9 +48,9 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
 
     const headerText =
       "Displaying Elements " +
-      (this.props.search.skip + 1) +
+      (this.props.search.lastSkip + 1) +
       " - " +
-      cards.length;
+      (this.props.search.lastSkip + cards.length);
 
     return React.createElement(
       "div",
@@ -58,13 +58,55 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       React.createElement(Divider, null),
       React.createElement(
         Header,
-        { as: "h3", block: true },
-        headerText,
-        React.createElement(Button)
+        {
+          block: true,
+          style: {
+            marginTop: "14px"
+          }
+        },
+        React.createElement(
+          Grid,
+          {
+            columns: "equal"
+          },
+          React.createElement(
+            Grid.Column,
+            {
+              textAlign: "left",
+              verticalAlign: "middle"
+            },
+            React.createElement("h3", null, headerText)
+          ),
+          React.createElement(
+            Grid.Column,
+            {
+              textAlign: "right",
+              verticalAlign: "middle"
+            },
+            React.createElement(
+              Button,
+              {
+                color: "grey",
+                disabled: !this.props.search.canSkip,
+                loading: this.props.search.active && this.props.search.canSkip,
+                onClick: () => this.handleSearchNext()
+              },
+              "Load " + this.props.search.pageSize + " more",
+              React.createElement(Icon, { name: "right arrow" })
+            )
+          )
+        )
       ),
       React.createElement(Card.Group, {
         children: cards
       })
     );
+  }
+
+  handleSearchNext() {
+    const search = this.props.search;
+    search.skip += search.pageSize;
+    search.onSearchUpdated(search);
+    search.onSearchClicked();
   }
 };

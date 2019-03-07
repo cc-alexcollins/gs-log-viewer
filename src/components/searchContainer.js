@@ -33,27 +33,23 @@ exports.SearchContainer = class SearchContainer extends React.Component {
   }
 
   handleLogLevelChange(newValue) {
-    const searchState = this.props.search;
-    searchState.levels = newValue;
-    this.props.search.onSearchUpdated(searchState);
+    this.props.search.levels = newValue;
+    this.pushSearchUpdate();
   }
 
   handleCategoryChange(newValue) {
-    const searchState = this.props.search;
-    searchState.categories = newValue;
-    this.props.search.onSearchUpdated(searchState);
+    this.props.search.categories = newValue;
+    this.pushSearchUpdate();
   }
 
   handlePlayerIdChange(newValue) {
-    const searchState = this.props.search;
-    searchState.playerId = newValue;
-    this.props.search.onSearchUpdated(searchState);
+    this.props.search.playerId = newValue;
+    this.pushSearchUpdate();
   }
 
   handleMessageQueryChange(newValue) {
-    const searchState = this.props.search;
-    searchState.messageQuery = newValue;
-    this.props.search.onSearchUpdated(searchState);
+    this.props.search.messageQuery = newValue;
+    this.pushSearchUpdate();
   }
 
   handleDataQueryChange(newValue) {
@@ -83,8 +79,14 @@ exports.SearchContainer = class SearchContainer extends React.Component {
       return;
     }
 
+    this.props.search.dataQuery = newValue;
+    this.pushSearchUpdate();
+  }
+
+  pushSearchUpdate() {
     const searchState = this.props.search;
-    searchState.dataQuery = newValue;
+    searchState.skip = 0;
+    searchState.canSkip = false;
     this.props.search.onSearchUpdated(searchState);
   }
 

@@ -137,6 +137,9 @@ class App extends React.Component {
       autoRefresh: false,
       active: false,
       forceDisplayActive: false,
+      canSkip: false,
+      lastSkip: 0,
+      pageSize: PAGE_SIZE,
 
       // Methods
       onSearchUpdated: search => this.updateSearch(search),
@@ -202,7 +205,7 @@ class App extends React.Component {
     // Build the payload
     const payload = this.buildPayload(
       search.fields,
-      PAGE_SIZE,
+      search.pageSize,
       query,
       search.skip,
       search.sort
@@ -240,6 +243,8 @@ class App extends React.Component {
         this.state.search.active = false;
         this.state.search.forceDisplayActive =
           this.state.display.elements.length === 0;
+        this.state.search.canSkip = true;
+        this.state.search.lastSkip = this.state.search.skip;
 
         this.setState({
           credentials: this.state.credentials,
