@@ -14,6 +14,10 @@ const TYPE_COLORS = {
   number: "red",
   boolean: "green"
 };
+
+const COLON = ":  ";
+
+const PADDING = 3;
 const DEPTH_SPACING = 20;
 
 exports.JsonAccordion = class JsonAccordion extends React.Component {
@@ -81,8 +85,8 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
             active: this.state.active,
             onClick: () => this.setState({ active: !this.state.active }),
             style: {
-              paddingTop: 5,
-              paddingBottom: 5
+              paddingTop: PADDING,
+              paddingBottom: PADDING
             }
           },
           React.createElement(
@@ -94,12 +98,15 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
               { color: KEY_COLOR, horizontal: true },
               this.props.json.key
             ),
-            ": ",
+            COLON,
             this.state.active ? "" : name
           )
         ),
         React.createElement(Accordion.Content, {
           active: this.state.active,
+          style: {
+            paddingTop: 0
+          },
           children: children
         })
       );
@@ -109,18 +116,18 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
       Item,
       {
         style: {
-          paddingLeft: DEPTH_SPACING,
-          paddingTop: 3,
-          paddingBottom: 3
+          paddingLeft: this.props.json.depth > 0 ? DEPTH_SPACING : 0,
+          paddingTop: PADDING,
+          paddingBottom: PADDING
         }
       },
       React.createElement(Icon, null),
       React.createElement(
         Label,
-        { color: "black", horizontal: true },
+        { color: KEY_COLOR, horizontal: true },
         this.props.json.key
       ),
-      ": ",
+      COLON,
       React.createElement(
         Label,
         {

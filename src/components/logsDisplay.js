@@ -2,10 +2,9 @@ const React = require("react");
 const SemanticUIReact = require("semantic-ui-react");
 const util = require("util");
 
-const CCUtils = require("../ccUtils");
 const Constants = require("../constants");
-const JsonAccordion = require("./jsonAccordion").JsonAccordion;
 const Log = require("../log");
+const LogsEntry = require("./logsEntry").LogsEntry;
 
 const Accordion = SemanticUIReact.Accordion;
 const Card = SemanticUIReact.Card;
@@ -37,54 +36,10 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
 
     const cards = this.props.elements
       ? this.props.elements.map((element, index) => {
-          const error = element.contents.level === "ERROR";
-
-          return React.createElement(
-            Card,
-            {
-              key: index,
-              fluid: true,
-              color: error ? "red" : undefined
-            },
-            React.createElement(
-              Card.Content,
-              null,
-              React.createElement(
-                Card.Header,
-                null,
-                React.createElement(Icon, {
-                  name: error ? "exclamation" : "info",
-                  color: error ? "red" : undefined,
-                  circular: true
-                }),
-                "  ",
-                element.contents.log.message
-              )
-            ),
-            React.createElement(
-              Card.Content,
-              null,
-              React.createElement(
-                Card.Meta,
-                null,
-                util.format(
-                  "%s | %s",
-                  element.contents.log.category,
-                  new Date(element.contents.ts.$numberLong).toString()
-                )
-              ),
-              React.createElement(JsonAccordion, {
-                key: "Contents",
-                json: {
-                  key: "Contents",
-                  data: element.contents,
-                  path: "obj",
-                  depth: 0
-                },
-                blackList: ["obj.ts", "obj.log.category"]
-              })
-            )
-          );
+          return React.createElement(LogsEntry, {
+            key: index,
+            element: element
+          });
         })
       : [];
 
