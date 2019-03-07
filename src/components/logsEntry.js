@@ -18,33 +18,6 @@ exports.LogsEntry = class LogsEntry extends React.Component {
     const element = this.props.element;
     const error = element.contents.level === "ERROR";
 
-    const children = Object.keys(element.contents).map((key, index) => {
-      if (key === "ts") return;
-
-      return React.createElement(JsonAccordion, {
-        key: index,
-        json: {
-          key: key,
-          data: element.contents[key],
-          path: element.contents[key],
-          depth: 0
-        },
-        blackList: ["log.category"]
-      });
-    });
-
-    children.unshift(
-      React.createElement(
-        Card.Meta,
-        { key: "meta" },
-        util.format(
-          "%s | %s",
-          element.contents.log.category,
-          new Date(element.contents.ts.$numberLong).toString()
-        )
-      )
-    );
-
     return React.createElement(
       Card,
       {
@@ -72,9 +45,60 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           element.contents.log.message
         )
       ),
-      React.createElement(Card.Content, {
-        children: children
-      })
+      React.createElement(
+        Card.Content,
+        null,
+        React.createElement(
+          Card.Meta,
+          null,
+          util.format(
+            "%s | %s",
+            element.contents.log.category,
+            new Date(element.contents.ts.$numberLong).toString()
+          )
+        ),
+        React.createElement(JsonAccordion, {
+          json: {
+            key: "playerId",
+            data: element.contents.playerId,
+            path: "playerId",
+            depth: 0
+          },
+          blackList: []
+        }),
+        React.createElement(JsonAccordion, {
+          json: {
+            key: "data",
+            data: element.contents.log.data,
+            path: "log.data",
+            depth: 0
+          },
+          blackList: []
+        }),
+        React.createElement(JsonAccordion, {
+          json: {
+            key: "stackTrace",
+            data: element.contents.stackTrace,
+            path: "stackTrace",
+            depth: 0
+          },
+          blackList: [],
+          displayOverride: data => {
+            const notLogIndex = data.findIndex(l => !l.includes("log"));
+            if (notLogIndex >= 0) {
+              return (
+                data[notLogIndex] +
+                " + " +
+                (data.length - notLogIndex - 1) +
+                " more"
+              );
+            }
+
+            console.log("no log found!");
+            return data[0];
+          }
+        })
+      )
     );
   }
 };

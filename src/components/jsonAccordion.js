@@ -35,7 +35,9 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
     if (dataType === "object") {
       let arrow = this.state.active ? "triangle down" : "triangle right";
       let nameText = "object { " + Object.keys(data).length + " }";
-      if (Array.isArray(data)) {
+      if (this.props.displayOverride) {
+        nameText = this.props.displayOverride(data);
+      } else if (Array.isArray(data)) {
         nameText = "array [ " + data.length + " ]";
         data = data.reduce((obj, element, index) => {
           obj[index] = element;
