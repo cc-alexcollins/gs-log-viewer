@@ -23,7 +23,7 @@ const DEFAULT_SEARCH = {
   skip: 0,
   autoRefresh: false,
   active: false,
-  forceDisplayActive: true
+  forceDisplayActive: false
 };
 
 class App extends React.Component {
@@ -104,6 +104,7 @@ class App extends React.Component {
       search.levels = [Constants.LogLevels.Debug, Constants.LogLevels.Error];
       search.sort = Constants.SortDefaults.TimestampLatest;
       search.fields = Constants.FieldsDefaults.LogMessage;
+      search.forceDisplayActive = true;
 
       this.setState({
         menuIndex: index,
