@@ -1,13 +1,21 @@
-const LogLevels = {
+const LogLevel = {
   Debug: "Debug",
   Error: "Error",
   Exception: "Exception"
 };
 
-const GSLogLevels = {
-  [LogLevels.Debug]: "DEBUG",
-  [LogLevels.Error]: "ERROR",
-  [LogLevels.Exception]: "ERROR"
+const LogLevelQuery = {
+  [LogLevel.Debug]: {
+    level: "DEBUG"
+  },
+  [LogLevel.Error]: {
+    level: "ERROR",
+    "log.data.exception": { $exists: false }
+  },
+  [LogLevel.Exception]: {
+    level: "ERROR",
+    "log.data.exception": { $exists: true }
+  }
 };
 
 const SortDefaults = {
@@ -56,8 +64,8 @@ const Category = [
 
 const Containers = { "ch-backend": "h348516i1zcM", "ch-alex": "V369801KkvYT" };
 
-exports.LogLevels = LogLevels;
-exports.GSLogLevels = GSLogLevels;
+exports.LogLevel = LogLevel;
+exports.LogLevelQuery = LogLevelQuery;
 exports.SortDefaults = SortDefaults;
 exports.FieldsDefaults = FieldsDefaults;
 exports.Category = Category;

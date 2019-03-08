@@ -102,9 +102,9 @@ class App extends React.Component {
       const search = this.getDefaultSearch();
       search.collection = "script.log";
       search.levels = [
-        Constants.LogLevels.Debug,
-        Constants.LogLevels.Error,
-        Constants.LogLevels.Exception
+        Constants.LogLevel.Debug,
+        Constants.LogLevel.Error,
+        Constants.LogLevel.Exception
       ];
       search.sort = Constants.SortDefaults.TimestampLatest;
       search.fields = Constants.FieldsDefaults.LogMessage;
@@ -184,7 +184,7 @@ class App extends React.Component {
   }
 
   cleanupSearch(search) {
-    const ll = Object.values(Constants.LogLevels);
+    const ll = Object.values(Constants.LogLevel);
     search.levels.sort((x, y) => {
       return ll.indexOf(x) - ll.indexOf(y);
     });
@@ -212,15 +212,10 @@ class App extends React.Component {
     }, {});
 
     if (search.levels && search.levels.length > 0) {
-      query.level = {
-        $in: search.levels.map(level => {
-          return Constants.GSLogLevels[level];
-        })
-      };
-
-      if (search.levels.includes(Constants.LogLevels.Exception)) {
-        query["log.data.exception"] = { $exists: true };
-      }
+      const l = search.levels;
+      query.$or = l.map(level => {
+        return Constants.LogLevelQuery[level];
+      });
     }
 
     if (search.categories && search.categories.length > 0) {

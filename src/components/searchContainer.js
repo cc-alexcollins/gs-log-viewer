@@ -194,18 +194,18 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                   React.createElement(
                     Form.Group,
                     { widths: "equal" },
-                    createCheckbox(Constants.LogLevels.Debug),
-                    createCheckbox(Constants.LogLevels.Error),
-                    createCheckbox(Constants.LogLevels.Exception)
+                    createCheckbox(Constants.LogLevel.Debug),
+                    createCheckbox(Constants.LogLevel.Error),
+                    createCheckbox(Constants.LogLevel.Exception)
                   )
                   /*,
 
                   React.createElement(
                     Grid,
                     null,
-                    createCheckbox(Constants.LogLevels.Debug),
-                    createCheckbox(Constants.LogLevels.Error),
-                    createCheckbox(Constants.LogLevels.Exception)
+                    createCheckbox(Constants.LogLevel.Debug),
+                    createCheckbox(Constants.LogLevel.Error),
+                    createCheckbox(Constants.LogLevel.Exception)
                   ) */
                 ),
                 React.createElement(Form.Dropdown, {
