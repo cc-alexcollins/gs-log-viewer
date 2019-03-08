@@ -70,6 +70,7 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
         React.createElement(
           Button,
           {
+            key: "back-button",
             color: "grey",
             disabled: !this.props.search.canSkip || !moreElements,
             loading: this.props.search.active && this.props.search.canSkip,
@@ -89,6 +90,7 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       React.createElement(
         Button,
         {
+          key: "next-button",
           color: "grey",
           disabled: !this.props.search.canSkip || !moreElements,
           loading: this.props.search.active && this.props.search.canSkip,

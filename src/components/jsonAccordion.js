@@ -25,7 +25,7 @@ const DEPTH_SPACING = 20;
 
 function stackTraceNameDisplay(stackArray) {
   // Remove the first log entry for clarity
-  const notLogIndex = stackArray.findIndex(l => !l.includes("log"));
+  const notLogIndex = stackArray.findIndex(l => l.search(/log:/gi) === -1);
   if (notLogIndex >= 0) {
     return (
       stackArray[notLogIndex] +
