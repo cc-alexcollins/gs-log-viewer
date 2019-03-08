@@ -6,8 +6,8 @@
   "scripts": {
     "start": "electron .",
     "start-dev": "electron . \"true\"",
-    "start-process": "npm start &",
-    "start-dev-process": "npm start-dev &",
+    "start-process": "electron . &",
+    "start-dev-process": "electron . \"true\" &",
     "watch": "watch \"pkill node ; npm run start-process\" src --wait=5 --interval=5"
   },
   "repository": "https://github.com/cc-alexcollins/gs-log-viewer",

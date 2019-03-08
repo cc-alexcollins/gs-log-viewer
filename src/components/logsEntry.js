@@ -57,13 +57,13 @@ exports.LogsEntry = class LogsEntry extends React.Component {
     );
 
     // If it exists, add the exception next
-    if (element.contents.log.data.exception) {
+    if (element.contents.log.exception) {
       topLevelDisplay.push(
         React.createElement(JsonAccordion, {
           key: "exception", // child key
           json: {
             key: "exception",
-            data: element.contents.log.data.exception,
+            data: element.contents.log.exception,
             path: "exception",
             depth: 0
           },
@@ -79,10 +79,10 @@ exports.LogsEntry = class LogsEntry extends React.Component {
         json: {
           key: "data",
           data: element.contents.log.data,
-          path: "log.data",
+          path: "data",
           depth: 0
         },
-        blackList: ["log.data.combatInstance._id", "log.data.exception"]
+        blackList: ["data.combatInstance._id"]
       })
     );
 

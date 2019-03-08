@@ -10,11 +10,11 @@ const LogLevelQuery = {
   },
   [LogLevel.Error]: {
     level: "ERROR",
-    "log.data.exception": { $exists: false }
+    "log.exception": { $exists: false }
   },
   [LogLevel.Exception]: {
     level: "ERROR",
-    "log.data.exception": { $exists: true }
+    "log.exception": { $exists: true }
   }
 };
 
