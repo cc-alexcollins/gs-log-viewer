@@ -29,9 +29,9 @@ function stackTraceNameDisplay(stackArray) {
   if (notLogIndex >= 0) {
     return (
       stackArray[notLogIndex] +
-      " + " +
-      (stackArray.length - notLogIndex - 1) +
-      " more"
+      (stackArray.length - notLogIndex - 1 > 0
+        ? " + " + (stackArray.length - notLogIndex - 1) + " more"
+        : "")
     );
   }
 
@@ -203,3 +203,5 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
     );
   }
 };
+
+exports.stackTraceNameDisplay = stackTraceNameDisplay;

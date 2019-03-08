@@ -8,7 +8,7 @@
     "start-dev": "electron . \"true\"",
     "start-process": "electron . &",
     "start-dev-process": "electron . \"true\" &",
-    "watch": "watch \"pkill node ; npm run start-process\" src --wait=5 --interval=5"
+    "watch": "watch \"pkill node ; npm run start-dev-process\" src --wait=5 --interval=5"
   },
   "repository": "https://github.com/cc-alexcollins/gs-log-viewer",
   "keywords": [

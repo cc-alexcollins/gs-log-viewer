@@ -5,7 +5,7 @@ const Constants = require("../constants");
 const Log = require("../log");
 
 const { Card, Icon, Grid } = require("semantic-ui-react");
-const { JsonAccordion } = require("./jsonAccordion");
+const { JsonAccordion, stackTraceNameDisplay } = require("./jsonAccordion");
 
 exports.LogsEntry = class LogsEntry extends React.Component {
   constructor(props) {
@@ -67,7 +67,11 @@ exports.LogsEntry = class LogsEntry extends React.Component {
             path: "exception",
             depth: 0
           },
-          blackList: []
+          blackList: [],
+          displayOverride: data =>
+            element.contents.log.exception.message +
+            " " +
+            stackTraceNameDisplay(element.contents.log.exception.stack)
         })
       );
     }
