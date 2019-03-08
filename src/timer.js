@@ -35,6 +35,18 @@ function active() {
   return timer !== null && timer.status === "running";
 }
 
+function pause() {
+  if (timer !== null) {
+    timer.pause();
+  }
+}
+
+function resume() {
+  if (timer !== null) {
+    timer.resume();
+  }
+}
+
 function timeLeft() {
   return (timer !== null && timer.status === "running" ? timer.time : 0) / 1000;
 }
@@ -48,5 +60,7 @@ function update(key, callback) {
 exports.start = start;
 exports.stop = stop;
 exports.active = active;
+exports.pause = pause;
+exports.resume = resume;
 exports.timeLeft = timeLeft;
 exports.update = update;

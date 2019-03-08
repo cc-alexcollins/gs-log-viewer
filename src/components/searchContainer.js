@@ -31,8 +31,15 @@ exports.SearchContainer = class SearchContainer extends React.Component {
   }
 
   handleAccordionClick() {
+    const newActive = !this.state.active;
+    if (newActive) {
+      Timer.pause();
+    } else {
+      Timer.resume();
+    }
+
     this.setState({
-      active: !this.state.active,
+      active: newActive,
       lastDataFailed: false
     });
   }
