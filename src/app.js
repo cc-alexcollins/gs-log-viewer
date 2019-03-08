@@ -101,7 +101,11 @@ class App extends React.Component {
     if (this.state.menuIndex !== index || force) {
       const search = this.getDefaultSearch();
       search.collection = "script.log";
-      search.levels = [Constants.LogLevels.Debug, Constants.LogLevels.Error];
+      search.levels = [
+        Constants.LogLevels.Debug,
+        Constants.LogLevels.Error,
+        Constants.LogLevels.Exception
+      ];
       search.sort = Constants.SortDefaults.TimestampLatest;
       search.fields = Constants.FieldsDefaults.LogMessage;
       search.forceDisplayActive = true;

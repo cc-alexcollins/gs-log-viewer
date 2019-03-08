@@ -7,7 +7,9 @@ const Timer = require("../timer");
 const {
   Accordion,
   Button,
+  Checkbox,
   Dropdown,
+  Grid,
   Header,
   Form,
   Input,
@@ -107,11 +109,27 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     }
 
     const createCheckbox = level => {
-      return React.createElement(Form.Checkbox, {
-        checked: this.props.search.levels.includes(level),
-        label: level,
-        onChange: (e, props) => this.handleLogLevelChange(level, props.checked)
-      });
+      return React.createElement(
+        Form.Field,
+        null,
+        React.createElement(
+          Grid,
+          null,
+          React.createElement(
+            Grid.Column,
+            {
+              textAlign: "center"
+            },
+            React.createElement(Checkbox, {
+              checked: this.props.search.levels.includes(level),
+              toggle: true,
+              onChange: (e, props) =>
+                this.handleLogLevelChange(level, props.checked)
+            }),
+            level
+          )
+        )
+      );
     };
 
     return React.createElement(
@@ -153,11 +171,27 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                 Form.Group,
                 { widths: "equal" },
                 React.createElement(
-                  Form.Group,
-                  { widths: "equal" },
-                  createCheckbox(Constants.LogLevels.Debug),
-                  createCheckbox(Constants.LogLevels.Error),
-                  createCheckbox(Constants.LogLevels.Exception)
+                  Form.Field,
+                  {
+                    label: "Log Levels",
+                    control: "div"
+                  },
+                  React.createElement(
+                    Form.Group,
+                    { widths: "equal" },
+                    createCheckbox(Constants.LogLevels.Debug),
+                    createCheckbox(Constants.LogLevels.Error),
+                    createCheckbox(Constants.LogLevels.Exception)
+                  )
+                  /*,
+
+                  React.createElement(
+                    Grid,
+                    null,
+                    createCheckbox(Constants.LogLevels.Debug),
+                    createCheckbox(Constants.LogLevels.Error),
+                    createCheckbox(Constants.LogLevels.Exception)
+                  ) */
                 ),
                 /*
                 React.createElement(Form.Dropdown, {
