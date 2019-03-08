@@ -4,7 +4,7 @@ const util = require("util");
 const Constants = require("../constants");
 const Log = require("../log");
 
-const { Card, Icon } = require("semantic-ui-react");
+const { Card, Icon, Grid } = require("semantic-ui-react");
 const { JsonAccordion } = require("./jsonAccordion");
 
 exports.LogsEntry = class LogsEntry extends React.Component {
@@ -33,17 +33,13 @@ exports.LogsEntry = class LogsEntry extends React.Component {
       React.createElement(
         Card.Content,
         null,
-        React.createElement(
-          Card.Header,
-          null,
-          React.createElement(Icon, {
-            name: error ? "exclamation" : "info",
-            color: error ? "red" : undefined,
-            circular: true
-          }),
-          "  ",
-          element.contents.log.message
-        )
+        React.createElement(Icon, {
+          name: error ? "exclamation" : "info",
+          color: error ? "red" : undefined,
+          circular: true
+        }),
+        "   ",
+        React.createElement("b", null, element.contents.log.message)
       ),
       React.createElement(
         Card.Content,
@@ -54,7 +50,15 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           util.format(
             "%s | %s",
             element.contents.log.category,
-            new Date(element.contents.ts.$numberLong).toString()
+            new Date(
+              parseInt(element.contents.ts.$date.$numberLong)
+            ).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit"
+            })
           )
         ),
         React.createElement(JsonAccordion, {
