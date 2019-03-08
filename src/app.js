@@ -121,6 +121,13 @@ class App extends React.Component {
   }
 
   updateCredentials(credentials) {
+    if (
+      this.state.credentials.apiKey === credentials.apiKey &&
+      this.state.credentials.token !== null
+    ) {
+      return;
+    }
+
     Promise.resolve()
       .then(() => {
         // Get a new token
