@@ -1,6 +1,13 @@
 const LogLevels = {
-  Debug: "DEBUG",
-  Error: "ERROR"
+  Debug: "Debug",
+  Error: "Error",
+  Exception: "Exception"
+};
+
+const GSLogLevels = {
+  [LogLevels.Debug]: "DEBUG",
+  [LogLevels.Error]: "ERROR",
+  [LogLevels.Exception]: "ERROR"
 };
 
 const SortDefaults = {
@@ -50,6 +57,7 @@ const Category = [
 const Containers = { "ch-backend": "h348516i1zcM", "ch-alex": "V369801KkvYT" };
 
 exports.LogLevels = LogLevels;
+exports.GSLogLevels = GSLogLevels;
 exports.SortDefaults = SortDefaults;
 exports.FieldsDefaults = FieldsDefaults;
 exports.Category = Category;

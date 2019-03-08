@@ -201,7 +201,9 @@ class App extends React.Component {
 
     if (search.levels && search.levels.length > 0) {
       query.level = {
-        $in: search.levels.slice(0) // Shallow copy for the payload
+        $in: search.levels.map(level => {
+          return Constants.GSLogLevels[level];
+        })
       };
     }
 

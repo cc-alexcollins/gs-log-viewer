@@ -34,8 +34,14 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     });
   }
 
-  handleLogLevelChange(newValue) {
-    this.props.search.levels = newValue;
+  handleLogLevelChange(level, add) {
+    const index = this.props.search.levels.indexOf(level);
+    if (add && index < 0) {
+      this.props.search.levels.push(level);
+    } else if (!add && index >= 0) {
+      this.props.search.levels.splice(index, 1);
+    }
+
     this.pushSearchUpdate();
   }
 
@@ -100,6 +106,14 @@ exports.SearchContainer = class SearchContainer extends React.Component {
       this.state.active = this.props.search.forceDisplayActive;
     }
 
+    const createCheckbox = level => {
+      return React.createElement(Form.Checkbox, {
+        checked: this.props.search.levels.includes(level),
+        label: level,
+        onChange: (e, props) => this.handleLogLevelChange(level, props.checked)
+      });
+    };
+
     return React.createElement(
       Visibility,
       {
@@ -138,6 +152,14 @@ exports.SearchContainer = class SearchContainer extends React.Component {
               React.createElement(
                 Form.Group,
                 { widths: "equal" },
+                React.createElement(
+                  Form.Group,
+                  { widths: "equal" },
+                  createCheckbox(Constants.LogLevels.Debug),
+                  createCheckbox(Constants.LogLevels.Error),
+                  createCheckbox(Constants.LogLevels.Exception)
+                ),
+                /*
                 React.createElement(Form.Dropdown, {
                   onChange: (e, p) => this.handleLogLevelChange(p.value),
                   label: "Log Level",
@@ -153,7 +175,7 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                       value: Constants.LogLevels[key]
                     };
                   })
-                }),
+                }), */
                 React.createElement(Form.Dropdown, {
                   onChange: (e, p) => this.handleCategoryChange(p.value),
                   label: "Category",
