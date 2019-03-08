@@ -35,7 +35,18 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
   render() {
     let data = this.props.json.data;
     let dataType = typeof data;
-    if (dataType === "object") {
+    const hasValue = data !== null && data !== undefined;
+
+    // Check for a long tag first
+    if (dataType === "object" && hasValue) {
+      if (data.$numberLong !== undefined) {
+        data = parseInt(data.$numberLong);
+        dataType = "number";
+      }
+    }
+
+    // Display the object as an expandable accordion
+    if (dataType === "object" && hasValue) {
       let arrow = this.state.active ? "triangle down" : "triangle right";
 
       let childCount = 0;
@@ -125,6 +136,7 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
       );
     }
 
+    // Display the value as a copiable field
     return React.createElement(
       Item,
       {
@@ -146,6 +158,7 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
         {
           position: "right center",
           hideOnScroll: true,
+          disabled: !hasValue,
           on: "hover",
           trigger: React.createElement(
             Label,
@@ -154,9 +167,11 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
               color: TYPE_COLORS[dataType] || "black",
               horizontal: true,
               basic: true,
-              onClick: () => clipboard.writeText(data.toString())
+              onClick: () => {
+                if (hasValue) clipboard.writeText(data.toString());
+              }
             },
-            data
+            hasValue ? data : "null"
           )
         },
         React.createElement(
