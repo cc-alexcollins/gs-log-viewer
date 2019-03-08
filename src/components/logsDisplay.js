@@ -64,6 +64,45 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
 
     const moreElements = cards.length === this.props.search.pageSize;
 
+    const skipButtons = [];
+    if (this.props.search.skip > 0) {
+      skipButtons.push(
+        React.createElement(
+          Button,
+          {
+            color: "grey",
+            disabled: !this.props.search.canSkip || !moreElements,
+            loading: this.props.search.active && this.props.search.canSkip,
+            onClick: () => {
+              if (this.props.search.skip > 0) this.handleSearchSkip(false);
+            }
+          },
+          React.createElement(Icon, {
+            name: "left arrow"
+          }),
+          "Back"
+        )
+      );
+    }
+
+    skipButtons.push(
+      React.createElement(
+        Button,
+        {
+          color: "grey",
+          disabled: !this.props.search.canSkip || !moreElements,
+          loading: this.props.search.active && this.props.search.canSkip,
+          onClick: () => {
+            if (moreElements) this.handleSearchSkip(true);
+          }
+        },
+        moreElements ? "Next" : "All elements loaded",
+        React.createElement(Icon, {
+          name: moreElements ? "right arrow" : "check"
+        })
+      )
+    );
+
     return React.createElement(
       "div",
       null,
@@ -89,30 +128,11 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
             },
             React.createElement("h3", null, headerText)
           ),
-          React.createElement(
-            Grid.Column,
-            {
-              textAlign: "right",
-              verticalAlign: "middle"
-            },
-            React.createElement(
-              Button,
-              {
-                color: "grey",
-                disabled: !this.props.search.canSkip || !moreElements,
-                loading: this.props.search.active && this.props.search.canSkip,
-                onClick: () => {
-                  if (moreElements) this.handleSearchNext();
-                }
-              },
-              moreElements
-                ? "Load " + this.props.search.pageSize + " more"
-                : "All elements loaded",
-              React.createElement(Icon, {
-                name: moreElements ? "right arrow" : "check"
-              })
-            )
-          )
+          React.createElement(Grid.Column, {
+            textAlign: "right",
+            verticalAlign: "middle",
+            children: skipButtons
+          })
         )
       ),
       React.createElement(Card.Group, {
@@ -121,9 +141,9 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
     );
   }
 
-  handleSearchNext() {
+  handleSearchSkip(forward) {
     const search = this.props.search;
-    search.skip += search.pageSize;
+    search.skip += forward ? search.pageSize : -search.pageSize;
     search.onSearchUpdated(search);
     search.onSearchClicked();
   }
