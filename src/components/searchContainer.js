@@ -193,31 +193,16 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                     createCheckbox(Constants.LogLevels.Exception)
                   ) */
                 ),
-                /*
-                React.createElement(Form.Dropdown, {
-                  onChange: (e, p) => this.handleLogLevelChange(p.value),
-                  label: "Log Level",
-                  placeholder: "All",
-                  fluid: true,
-                  multiple: true,
-                  selection: true,
-                  value: this.props.search.levels,
-                  options: Object.keys(Constants.LogLevels).map(key => {
-                    return {
-                      key: key,
-                      text: key,
-                      value: Constants.LogLevels[key]
-                    };
-                  })
-                }), */
                 React.createElement(Form.Dropdown, {
                   onChange: (e, p) => this.handleCategoryChange(p.value),
                   label: "Category",
                   placeholder: "All",
                   fluid: true,
                   multiple: true,
+                  search: true,
                   selection: true,
                   value: this.props.search.categories,
+                  closeOnChange: true,
                   options: Object.keys(Constants.Category).map(key => {
                     return {
                       key: key,
