@@ -15,7 +15,10 @@ const {
 exports.CredentialsButton = class CredentialsButton extends React.Component {
   setContainer(apiKey) {
     const credentialsState = this.props.credentials;
+    if (apiKey === credentialsState.apiKey) return;
+
     credentialsState.apiKey = apiKey;
+    credentialsState.token = null;
     this.props.onCredentialsUpdated(credentialsState);
   }
 
@@ -33,7 +36,7 @@ exports.CredentialsButton = class CredentialsButton extends React.Component {
         {
           as: "div",
           animated: "fade",
-          loading: this.props.credentials.loading,
+          loading: loading,
           positive: loggedIn && !loading,
           negative: !loggedIn && !loading,
           style: {
