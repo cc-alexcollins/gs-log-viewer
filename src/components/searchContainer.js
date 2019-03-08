@@ -15,6 +15,7 @@ const {
   Input,
   Item,
   Menu,
+  Transition,
   Visibility
 } = require("semantic-ui-react");
 
@@ -91,6 +92,13 @@ exports.SearchContainer = class SearchContainer extends React.Component {
 
     this.props.search.dataQuery = newValue;
     this.pushSearchUpdate();
+  }
+
+  handleAutoRefreshDelayChange(newValue) {
+    this.props.search.autoRefreshDelay = newValue;
+
+    // Don't reset skip in this case
+    this.props.search.onSearchUpdated(this.props.search);
   }
 
   pushSearchUpdate() {
@@ -258,7 +266,9 @@ exports.SearchContainer = class SearchContainer extends React.Component {
               ),
               React.createElement(
                 Form.Group,
-                { inline: true },
+                {
+                  inline: true
+                },
                 React.createElement(
                   Form.Button,
                   {
@@ -276,6 +286,19 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                       : "On (Paused)"
                     : "Off"
                 ),
+                React.createElement(Transition.Group, {
+                  animation: "fade right",
+                  children: this.props.search.autoRefresh
+                    ? React.createElement(Form.Input, {
+                        width: "2",
+                        icon: "clock",
+                        iconPosition: "left",
+                        value: this.props.search.autoRefreshDelay,
+                        onChange: (e, p) =>
+                          this.handleAutoRefreshDelayChange(p.value)
+                      })
+                    : []
+                }),
                 React.createElement(
                   Form.Button,
                   {

@@ -11,7 +11,7 @@ const Log = require("./log");
 const Timer = require("./timer");
 
 const PAGE_SIZE = 20;
-const REFRESH_TIME = 15 * 1000;
+const REFRESH_TIME = 15;
 
 class App extends React.Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class App extends React.Component {
     const search = this.state.search;
     if (search.autoRefresh) {
       if (this.state.search.canSkip) {
-        Timer.start(REFRESH_TIME, () => {
+        Timer.start(this.state.search.autoRefreshDelay * 1000, () => {
           this.search();
         });
       } else {
@@ -163,6 +163,7 @@ class App extends React.Component {
 
       // State
       autoRefresh: false,
+      autoRefreshDelay: REFRESH_TIME,
       active: false,
       forceDisplayActive: false,
       canSkip: false,
