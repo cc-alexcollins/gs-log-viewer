@@ -52,6 +52,8 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       " - " +
       (this.props.search.lastSkip + cards.length);
 
+    const moreElements = cards.length === this.props.search.pageSize;
+
     return React.createElement(
       "div",
       null,
@@ -87,12 +89,18 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
               Button,
               {
                 color: "grey",
-                disabled: !this.props.search.canSkip,
+                disabled: !this.props.search.canSkip || !moreElements,
                 loading: this.props.search.active && this.props.search.canSkip,
-                onClick: () => this.handleSearchNext()
+                onClick: () => {
+                  if (moreElements) this.handleSearchNext();
+                }
               },
-              "Load " + this.props.search.pageSize + " more",
-              React.createElement(Icon, { name: "right arrow" })
+              moreElements
+                ? "Load " + this.props.search.pageSize + " more"
+                : "All elements loaded",
+              React.createElement(Icon, {
+                name: moreElements ? "right arrow" : "check"
+              })
             )
           )
         )
