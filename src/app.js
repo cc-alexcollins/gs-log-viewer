@@ -8,8 +8,10 @@ const LogsDisplay = require("./components/logsDisplay").LogsDisplay;
 
 const Constants = require("./constants");
 const Log = require("./log");
+const Timer = require("./timer");
 
 const PAGE_SIZE = 20;
+const REFRESH_TIME = 15 * 1000;
 
 class App extends React.Component {
   constructor(props) {
@@ -78,6 +80,21 @@ class App extends React.Component {
       ),
       menuComponents
     );
+  }
+
+  componentDidUpdate() {
+    const search = this.state.search;
+    if (search.autoRefresh) {
+      if (this.state.search.canSkip) {
+        Timer.start(REFRESH_TIME, () => {
+          this.search();
+        });
+      } else {
+        Timer.stop();
+      }
+    } else if (!search.autoRefresh && search.timer !== null) {
+      Timer.stop();
+    }
   }
 
   setIndex(index, force) {
@@ -177,7 +194,7 @@ class App extends React.Component {
       const json = JSON.stringify(entry);
 
       const parsed = JSON.parse(json);
-      const logKey = "log." + Object.keys(parsed)[0];
+      const logKey = "log.data." + Object.keys(parsed)[0];
       query[logKey] = Object.values(parsed)[0];
       return query;
     }, {});
@@ -251,6 +268,8 @@ class App extends React.Component {
           search: this.state.search,
           display: this.state.display
         });
+
+        this.componentDidUpdate();
       });
   }
 

@@ -2,6 +2,7 @@ const React = require("react");
 
 const Constants = require("../constants");
 const Log = require("../log");
+const Timer = require("../timer");
 
 const {
   Accordion,
@@ -21,7 +22,8 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     this.state = {
       stuck: false,
       active: true,
-      lastDataFailed: false
+      lastDataFailed: false,
+      timeToUpdate: 0
     };
   }
 
@@ -118,7 +120,9 @@ exports.SearchContainer = class SearchContainer extends React.Component {
               onClick: () => this.handleAccordionClick()
             },
             React.createElement("i", { className: "dropdown icon" }),
-            "Search"
+            Timer.active()
+              ? "Search (Refreshing In " + Math.round(Timer.timeLeft()) + "s)"
+              : "Search"
           ),
           React.createElement(
             Accordion.Content,
@@ -225,7 +229,11 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                     toggle: true,
                     active: this.props.search.autoRefresh
                   },
-                  this.props.search.autoRefresh ? "On" : "Off"
+                  this.props.search.autoRefresh
+                    ? Timer.active()
+                      ? "On"
+                      : "On (Paused)"
+                    : "Off"
                 ),
                 React.createElement(
                   Form.Button,
@@ -259,30 +267,11 @@ exports.SearchContainer = class SearchContainer extends React.Component {
       searchState.forceDisplayActive = undefined;
       this.props.search.onSearchUpdated(searchState);
     }
+
+    Timer.update("searchContainer", () => {
+      this.setState({
+        timeToUpdate: Timer.timeLeft()
+      });
+    });
   }
 };
-
-/*
-
-React.createElement(
-  Form,
-  null,
-  React.createElement(
-    "div",
-    { className: "three fields" },
-    React.createElement(Form.Input, {
-      label: "levels",
-      type: "text"
-    }),
-    React.createElement(Form.Input, {
-      label: "password",
-      type: "password"
-    }),
-    React.createElement(Form.Input, {
-      label: "secret",
-      type: "password"
-    })
-  )
-)
-
-*/
