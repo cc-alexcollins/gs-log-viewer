@@ -12,7 +12,7 @@ exports.HeaderBar = class HeaderBar extends React.Component {
     return React.createElement(
       Menu,
       null,
-      React.createElement(Menu.Item, { header: true }, "Gamesparks Log Viewer"),
+      React.createElement(Menu.Item, { header: true }, "GS Log Viewer"),
       React.createElement(
         Menu.Item,
         {

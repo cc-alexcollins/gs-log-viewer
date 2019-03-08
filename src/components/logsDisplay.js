@@ -24,16 +24,26 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
     Log.renderLog("Logs Display", this);
 
     if (!this.props.elements) {
-      return React.createElement(Header, null, "Ready to search");
+      return React.createElement(
+        Header,
+        {
+          block: true,
+          style: {
+            marginTop: "14px"
+          }
+        },
+        React.createElement("h3", null, "Ready to search")
+      );
     } else if (this.props.elements.length === 0) {
       return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          Header,
-          { as: "h2", className: "dividing" },
-          "No Results Found!"
-        )
+        Header,
+        {
+          block: true,
+          style: {
+            marginTop: "14px"
+          }
+        },
+        React.createElement("h3", null, "No Results Found!")
       );
     }
 

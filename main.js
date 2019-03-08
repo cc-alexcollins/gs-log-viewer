@@ -4,7 +4,7 @@ const { app, BrowserWindow } = require("electron");
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-let devTools = true;
+let devTools = process.argv[2] == "true";
 
 function createWindow() {
   // Create the browser window.
