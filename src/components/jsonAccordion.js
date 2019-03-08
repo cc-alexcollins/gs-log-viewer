@@ -23,6 +23,21 @@ const COLON = ":  ";
 const PADDING = 3;
 const DEPTH_SPACING = 20;
 
+function stackTraceNameDisplay(stackArray) {
+  // Remove the first log entry for clarity
+  const notLogIndex = stackArray.findIndex(l => !l.includes("log"));
+  if (notLogIndex >= 0) {
+    return (
+      stackArray[notLogIndex] +
+      " + " +
+      (stackArray.length - notLogIndex - 1) +
+      " more"
+    );
+  }
+
+  return stackArray[0];
+}
+
 exports.JsonAccordion = class JsonAccordion extends React.Component {
   constructor(props) {
     super(props);
@@ -76,7 +91,11 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
       if (this.props.displayOverride) {
         nameText = this.props.displayOverride(data);
       } else if (Array.isArray(data)) {
-        nameText = "array [ " + childCount + " ]";
+        if (this.props.json.key.includes("stack")) {
+          nameText = stackTraceNameDisplay(data);
+        } else {
+          nameText = "array [ " + childCount + " ]";
+        }
       }
 
       let name = React.createElement(
