@@ -205,6 +205,10 @@ class App extends React.Component {
           return Constants.GSLogLevels[level];
         })
       };
+
+      if (search.levels.includes(Constants.LogLevels.Exception)) {
+        query["log.data.exception"] = { $exists: true };
+      }
     }
 
     if (search.categories && search.categories.length > 0) {
