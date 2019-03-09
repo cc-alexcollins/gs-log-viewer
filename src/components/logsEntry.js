@@ -4,7 +4,7 @@ const util = require("util");
 const Constants = require("../constants");
 const Log = require("../log");
 
-const { Card, Icon, Grid } = require("semantic-ui-react");
+const { Card, Icon, Label } = require("semantic-ui-react");
 const { JsonAccordion, stackTraceNameDisplay } = require("./jsonAccordion");
 
 exports.LogsEntry = class LogsEntry extends React.Component {
@@ -17,6 +17,29 @@ exports.LogsEntry = class LogsEntry extends React.Component {
 
     const element = this.props.element;
     const error = element.contents.level === "ERROR";
+
+    const headerDisplay = [
+      React.createElement(Icon, {
+        key: "icon", // child key
+        name: error ? "exclamation" : "info",
+        color: error ? "red" : undefined,
+        circular: true
+      }),
+      "   ",
+      React.createElement("b", { key: "text" }, element.contents.log.message)
+    ];
+
+    if (this.props.element.isNew) {
+      headerDisplay.push("   ");
+      headerDisplay.push(
+        React.createElement(
+          Label,
+          { key: "new-label", pointing: "left", color: "teal" },
+          React.createElement(Icon, { name: "star" }),
+          "New!"
+        )
+      );
+    }
 
     const topLevelDisplay = [];
 
@@ -71,7 +94,7 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           displayOverride: data =>
             element.contents.log.exception.message +
             " " +
-            stackTraceNameDisplay(element.contents.log.exception.stack)
+            stackTraceNameDisplay(element.contents.log.exception.stack || [])
         })
       );
     }
@@ -116,17 +139,9 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           marginLeft: "1em"
         }
       },
-      React.createElement(
-        Card.Content,
-        null,
-        React.createElement(Icon, {
-          name: error ? "exclamation" : "info",
-          color: error ? "red" : undefined,
-          circular: true
-        }),
-        "   ",
-        React.createElement("b", null, element.contents.log.message)
-      ),
+      React.createElement(Card.Content, {
+        children: headerDisplay
+      }),
       React.createElement(Card.Content, {
         children: topLevelDisplay
       })
