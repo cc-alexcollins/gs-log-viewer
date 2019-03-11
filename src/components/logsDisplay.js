@@ -1,3 +1,4 @@
+const { BrowserWindow } = require("electron").remote;
 const React = require("react");
 const util = require("util");
 
@@ -18,6 +19,7 @@ const { LogsEntry } = require("./logsEntry");
 exports.LogsDisplay = class LogsDisplay extends React.Component {
   constructor(props) {
     super(props);
+    console.log("BrowserWindow", BrowserWindow);
   }
 
   render() {
@@ -162,21 +164,53 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       ),
       React.createElement(Card.Group, {
         children: cards
-      })
+      }),
+      React.createElement(
+        Header,
+        {
+          block: true,
+          style: {
+            marginTop: "14px"
+          }
+        },
+        React.createElement(
+          Grid,
+          {
+            columns: "equal"
+          },
+          React.createElement(Grid.Column, {
+            textAlign: "center",
+            verticalAlign: "middle",
+            children: skipButtons
+          })
+        )
+      )
     );
   }
 
   handleSearchReset() {
-    const search = this.props.search;
-    search.skip = 0;
-    search.onSearchUpdated(search);
-    search.onSearchClicked();
+    this.handleSetSkip(0);
   }
 
   handleSearchSkip(forward) {
     const search = this.props.search;
-    search.skip += forward ? search.pageSize : -search.pageSize;
+    const newSkip =
+      search.skip + (forward ? search.pageSize : -search.pageSize);
+    this.handleSetSkip(newSkip);
+  }
+
+  handleSetSkip(skip) {
+    const search = this.props.search;
+    search.skip = skip;
     search.onSearchUpdated(search);
     search.onSearchClicked();
+
+    if (window) {
+      window.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   }
 };
