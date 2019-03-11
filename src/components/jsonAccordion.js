@@ -15,7 +15,7 @@ const TYPE_COLORS = {
   object: "black",
   string: "orange",
   number: "red",
-  boolean: "green"
+  boolean: "blue"
 };
 
 const COLON = ":  ";
@@ -190,7 +190,7 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
                 if (hasValue) clipboard.writeText(data.toString());
               }
             },
-            hasValue ? data : "null"
+            hasValue ? data.toString() : "null"
           )
         },
         React.createElement(
