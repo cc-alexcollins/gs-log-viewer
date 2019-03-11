@@ -65,6 +65,29 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
     const moreElements = cards.length === this.props.search.pageSize;
 
     const skipButtons = [];
+    if (this.props.search.skip > this.props.search.pageSize) {
+      skipButtons.push(
+        React.createElement(
+          Button,
+          {
+            key: "first-button",
+            color: "grey",
+            disabled: !this.props.search.canSkip || !moreElements,
+            loading: this.props.search.active && this.props.search.canSkip,
+            onClick: () => {
+              if (this.props.search.skip > this.props.search.pageSize) {
+                this.handleSearchReset();
+              }
+            }
+          },
+          React.createElement(Icon, {
+            name: "repeat"
+          }),
+          "Reset"
+        )
+      );
+    }
+
     if (this.props.search.skip > 0) {
       skipButtons.push(
         React.createElement(
@@ -141,6 +164,13 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
         children: cards
       })
     );
+  }
+
+  handleSearchReset() {
+    const search = this.props.search;
+    search.skip = 0;
+    search.onSearchUpdated(search);
+    search.onSearchClicked();
   }
 
   handleSearchSkip(forward) {
