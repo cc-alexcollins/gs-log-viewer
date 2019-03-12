@@ -119,7 +119,7 @@ exports.SearchContainer = class SearchContainer extends React.Component {
     Log.renderLog("Search Container", this);
 
     if (this.props.search.forceDisplayActive !== undefined) {
-      // temp state update -- update happens in component did update
+      // Temp state update -- update happens in component did update
       this.state.active = this.props.search.forceDisplayActive;
     }
 

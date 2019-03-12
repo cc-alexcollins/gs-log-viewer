@@ -91,6 +91,7 @@ exports.LogsEntry = class LogsEntry extends React.Component {
             depth: 0
           },
           blackList: [],
+          forceClose: this.props.forceClose,
           displayOverride: data =>
             element.contents.log.exception.message +
             " " +
@@ -109,6 +110,7 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           path: "data",
           depth: 0
         },
+        forceClose: this.props.forceClose,
         blackList: ["data.combatInstance._id"]
       })
     );
@@ -123,6 +125,7 @@ exports.LogsEntry = class LogsEntry extends React.Component {
           path: "stackTrace",
           depth: 0
         },
+        forceClose: this.props.forceClose,
         blackList: []
       })
     );

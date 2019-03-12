@@ -49,11 +49,14 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
       );
     }
 
+    let closeAll = this.props.search.forceDisplayActive !== undefined;
+
     const cards = this.props.elements
       ? this.props.elements.map((element, index) => {
           return React.createElement(LogsEntry, {
             key: index,
-            element: element
+            element: element,
+            forceClose: closeAll
           });
         })
       : [];

@@ -48,6 +48,11 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
   }
 
   render() {
+    if (this.props.forceClose) {
+      // Temp state update -- update happens in component did update
+      this.state.active = false;
+    }
+
     let data = this.props.json.data;
     let dataType = typeof data;
     const hasValue = data !== null && data !== undefined;
@@ -81,7 +86,8 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
               path: path,
               depth: this.props.json.depth + 1
             },
-            blackList: this.props.blackList
+            blackList: this.props.blackList,
+            forceClose: this.props.forceClose
           })
         );
         return children;
@@ -201,6 +207,14 @@ exports.JsonAccordion = class JsonAccordion extends React.Component {
         )
       )
     );
+  }
+
+  componentDidUpdate() {
+    if (this.props.forceClose) {
+      this.setState({
+        active: false
+      });
+    }
   }
 };
 
