@@ -22,7 +22,7 @@ class App extends React.Component {
       credentials: {
         username: "jeff@cloudcade.com",
         password: ".9L8kwHb",
-        apiKey: "h348516i1zcM",
+        apiKey: Constants["ch-backend"],
         stage: "preview",
         token: null,
         loading: false
