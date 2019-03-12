@@ -6,6 +6,8 @@ function getAccessToken(credentials) {
     credentials.apiKey +
     "/jwt/nosql";
 
+  console.log("logging in at", url);
+
   return request
     .post(url)
     .auth(credentials.username, credentials.password)
