@@ -13,6 +13,11 @@ const {
 } = require("semantic-ui-react");
 
 exports.CredentialsButton = class CredentialsButton extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { dropdownOpen: false };
+  }
   setContainer(apiKey) {
     const credentialsState = this.props.credentials;
     if (apiKey === credentialsState.apiKey) return;
@@ -39,6 +44,8 @@ exports.CredentialsButton = class CredentialsButton extends React.Component {
           loading: loading,
           positive: loggedIn && !loading,
           negative: !loggedIn && !loading,
+          onClick: () =>
+            this.setState({ dropdownOpen: !this.state.dropdownOpen }),
           style: {
             overflow: "visible"
           }
@@ -60,6 +67,8 @@ exports.CredentialsButton = class CredentialsButton extends React.Component {
             text: Object.keys(Constants.Containers).find(
               c => Constants.Containers[c] === this.props.credentials.apiKey
             ),
+            onOpen: () => this.setState({ dropdownOpen: true }),
+            onClose: () => this.setState({ dropdownOpen: false }),
             onChange: (e, props) => {
               if (!loading) {
                 this.setContainer(props.value);
@@ -72,7 +81,8 @@ exports.CredentialsButton = class CredentialsButton extends React.Component {
                 value: Constants.Containers[c]
               };
             }),
-            value: this.props.credentials.apiKey
+            value: this.props.credentials.apiKey,
+            open: this.state.dropdownOpen
           })
         )
       )
