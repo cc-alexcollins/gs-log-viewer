@@ -136,7 +136,7 @@ class App extends React.Component {
           this.setState({
             credentials: credentials
           });
-          this.setIndex(this.state.menuIndex, true);
+          this.setIndex(this.state.menuIndex, false);
         });
       });
   }
@@ -162,6 +162,7 @@ class App extends React.Component {
       canSkip: false,
       lastSkip: 0,
       pageSize: PAGE_SIZE,
+      error: "",
 
       // Methods
       onSearchUpdated: search => this.updateSearch(search),
@@ -279,6 +280,7 @@ class App extends React.Component {
           this.state.display.elements.length === 0;
         this.state.search.canSkip = true;
         this.state.search.lastSkip = this.state.search.skip;
+        this.state.search.error = "";
 
         this.setState({
           credentials: this.state.credentials,
@@ -287,6 +289,23 @@ class App extends React.Component {
         });
 
         this.componentDidUpdate();
+      })
+      .catch(err => {
+        console.log("Api error! Resetting login!", err);
+
+        this.state.display.elements = [];
+        this.state.search.active = false;
+        this.state.search.forceDisplayActive = true;
+        this.state.search.canSkip = true;
+        this.state.search.lastSkip = this.state.search.skip;
+        this.state.search.error = err.toString();
+
+        this.setState({
+          search: this.state.search,
+          display: this.state.display
+        });
+
+        this.updateCredentials(this.state.credentials);
       });
   }
 

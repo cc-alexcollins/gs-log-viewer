@@ -25,7 +25,18 @@ exports.LogsDisplay = class LogsDisplay extends React.Component {
   render() {
     Log.renderLog("Logs Display", this);
 
-    if (!this.props.elements) {
+    if (this.props.search.error !== "") {
+      return React.createElement(
+        Header,
+        {
+          block: true,
+          style: {
+            marginTop: "14px"
+          }
+        },
+        React.createElement("h4", null, this.props.search.error)
+      );
+    } else if (!this.props.elements) {
       return React.createElement(
         Header,
         {

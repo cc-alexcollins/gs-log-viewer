@@ -37,11 +37,14 @@ async function find(credentials, collection, payload) {
     .setGSHeaders(credentials)
     .send(payload)
     .then(response => {
+      if (response.status !== 200) {
+        throw new Error(response.status + " | " + response.text);
+      }
       return response.body;
     })
     .catch(err => {
-      console.log("find error", JSON.stringify(err));
-      return [];
+      console.log("find error", err);
+      throw err;
     });
 }
 
