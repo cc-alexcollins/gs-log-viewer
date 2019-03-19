@@ -225,6 +225,17 @@ class App extends React.Component {
       query["log.message"] = { $regex: search.messageQuery };
     }
 
+    // Restrict logs to the last week
+    if (!query.ts) {
+      const date = new Date();
+      date.setDate(date.getDate() - 3);
+      query.ts = {
+        $gt: {
+          $date: date.toISOString()
+        }
+      };
+    }
+
     // Build the payload
     const payload = this.buildPayload(
       search.fields,
