@@ -319,6 +319,20 @@ exports.SearchContainer = class SearchContainer extends React.Component {
                     disabled: !this.props.canSearch
                   },
                   "Search Now"
+                ),
+                React.createElement(
+                  Form.Button,
+                  {
+                    onClick: () => {
+                      if (!this.props.search.active) {
+                        this.props.onSearchResetClicked();
+                      }
+                    },
+                    loading: this.props.search.active,
+                    disabled: !this.props.canSearch,
+                    color: "red"
+                  },
+                  "Reset Search"
                 )
               )
             )

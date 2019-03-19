@@ -53,6 +53,7 @@ class App extends React.Component {
             this.state.search.autoRefresh = auto;
             this.setState({ search: this.state.search });
           },
+          onSearchResetClicked: () => this.setIndex(this.state.menuIndex, true),
           canSearch: this.state.credentials.token !== null
         }),
         React.createElement(LogsDisplay, {
