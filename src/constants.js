@@ -62,7 +62,11 @@ const Category = [
   return all;
 }, {});
 
-const Containers = { "ch-backend": "h348516i1zcM", "ch-alex": "V369801KkvYT" };
+const Containers = {
+  "ch-backend": "h348516i1zcM",
+  "ch-alex": "V369801KkvYT",
+  "ch-chui": "M353105pZ4RV"
+};
 
 exports.LogLevel = LogLevel;
 exports.LogLevelQuery = LogLevelQuery;
