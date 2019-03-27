@@ -64,6 +64,7 @@ const Category = [
 
 const Containers = {
   "ch-backend": "h348516i1zcM",
+  "ch-stable": "C372272aaX47",
   "ch-alex": "V369801KkvYT",
   "ch-chui": "M353105pZ4RV"
 };
